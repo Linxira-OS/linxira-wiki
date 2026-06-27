@@ -1,0 +1,30 @@
+site_name: Linxira OS Wiki
+site_description: Linxira OS 官方文档 — 仅记录 Linxira 独有特性
+site_url: https://linxira-os.github.io/linxira-wiki/
+
+theme:
+  name: material
+  palette:
+    primary: teal
+    accent: purple
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+
+nav:
+  - 首页: index.md
+  - Linxira 特性:
+    - 品牌系统: Linxira 特性/branding.md
+    - 配置中心: Linxira 特性/config-hub.md
+    - 预装工具: Linxira 特性/preinstalled-tools.md
+    - 工作流模板: Linxira 特性/workflows.md
+  - 外部链接:
+    - Arch Wiki: 外部链接/arch-wiki.md
+    - Debian 文档: 外部链接/debian.md
+    - Linux Mint: 外部链接/mint.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
