@@ -1,6 +1,7 @@
 # Linux Mint 文档
 
-Linxira OS 基于 Linux Mint，因此 Mint 的工具文档对理解系统配置很有帮助。
+!!! warning "历史迁移背景"
+    此页面保留用于追溯 Linxira 早期 Linux Mint 路线，不描述当前系统，也不在当前导航中。Linxira OS 现已直接基于 Arch Linux 构建，不使用 Mint 作为底层发行版。
 
 ## 推荐资源
 
@@ -8,7 +9,7 @@ Linxira OS 基于 Linux Mint，因此 Mint 的工具文档对理解系统配置�
 - [Linux Mint 官方博客](https://blog.linuxmint.com/)
 - [Linux Mint Forums](https://forums.linuxmint.com/)
 
-## Mint 工具
+## 历史参考工具
 
 | 工具 | 说明 | 文档 |
 |------|------|------|
@@ -17,11 +18,11 @@ Linxira OS 基于 Linux Mint，因此 Mint 的工具文档对理解系统配置�
 | mintsources | 软件源配置 | [GitHub](https://github.com/linuxmint/mintsources) |
 | timeshift | 系统快照 | [GitHub](https://github.com/linuxmint/timeshift) |
 
-## 注意事项
+## 当前架构差异
 
-Linxira OS 与 Linux Mint 的区别：
+当前 Linxira OS 与这条历史路线的主要差异：
 
-- 使用自有品牌标识
-- 默认桌面环境为 KDE Plasma (而非 Cinnamon)
-- 预装开发和科研工具
-- 使用 mise 替代部分 Mint 工具
+- 直接使用 Arch Linux 官方仓库、`pacman` 和滚动更新模型
+- 默认桌面环境为 KDE Plasma
+- 使用 Shelly 管理图形化软件包与更新
+- 使用 Linxira Welcome、Calamares 和 Config Hub 承担各自的产品职责

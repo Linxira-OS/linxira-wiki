@@ -1,14 +1,12 @@
 # Arch Wiki
 
-**Arch Wiki** 是 Linux 世界的维基百科，几乎涵盖所有发行版的通用 Linux 问题。
+Linxira OS 直接基于 Arch Linux 构建。Arch Wiki 是系统管理、软件包、硬件和桌面配置的首要上游文档。
 
 ## 为什么参考 Arch Wiki
 
-虽然 Linxira OS 基于 Ubuntu/Mint，但 Arch Wiki 的文档质量是 Linux 社区最高的：
-
-- 覆盖面广：从基础配置到高级调优
-- 更新及时：社区活跃，文档经常更新
-- 通用性强：大部分内容适用于所有发行版
+- Linxira 使用 `pacman` 和 Arch 官方仓库
+- Linxira 采用 Arch 的滚动更新模型，不支持部分升级
+- 通用 Arch、systemd、KDE 和硬件配置通常可以直接参考上游说明
 
 ## 推荐阅读
 
@@ -20,8 +18,8 @@
 
 ## 注意事项
 
-Arch Wiki 中的部分内容可能需要适配：
+Arch Wiki 描述的是 Arch Linux，而不是 Linxira 产品功能。使用时应注意：
 
-- 包管理命令：`pacman` → `apt`
-- 配置文件路径可能略有不同
-- 某些 AUR 包需要从其他来源安装
+- Linxira 独有的 Welcome、Shelly 默认设置、Calamares 安装流程和 Config Hub 行为以本 Wiki 为准
+- AUR 是用户提交的构建配方，不属于 Arch 官方仓库，Linxira 默认不启用
+- 不要为 Linxira 执行面向 Debian、Ubuntu 或 Mint 的 `apt` 指令

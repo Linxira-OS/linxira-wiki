@@ -1,59 +1,53 @@
-# 工作流模板
+# 工作流配置
 
-Linxira Config Hub 提供预设的工作流模板，一键配置完整开发环境。
+Linxira Config Hub 从系统的软件目录读取配置，不在脚本中维护另一份软件包清单。查看当前可用配置：
 
-## 科研工作流
+```bash
+linxira-config workflow help
+```
 
-包含：Python + R + LaTeX + Bioconda
+安装会先刷新并完整升级 Arch 软件包事务，避免滚动发行版的部分升级。
+
+## 科学计算
 
 ```bash
 linxira-config workflow science
 ```
 
-预装组件：
-- Python 科学计算栈 (numpy, scipy, pandas, matplotlib)
-- R 语言基础环境
-- LaTeX 文档排版
-- Bioconda 通道 (bwa, samtools, star 等)
+包括 R、Octave、Gnuplot、ParaView、JupyterLab，以及 NumPy、SciPy、Matplotlib 和 pandas。
 
-## 开发工作流
-
-包含：Node.js + Rust + Go + Docker
+## 软件开发
 
 ```bash
-linxira-config workflow dev
+linxira-config workflow developer
 ```
 
-预装组件：
-- Node.js LTS + npm/pnpm
-- Rust + cargo
-- Go
-- Distrobox (可运行 Arch 容器)
+包括 `base-devel`、Git、CMake、Code、Rust、Go、Node.js、npm、Python 和 pip。
 
-## AI/ML 工作流
-
-包含：Python + CUDA + PyTorch
+## AI 与机器学习
 
 ```bash
 linxira-config workflow ai
 ```
 
-预装组件：
-- Python + PyTorch
-- CUDA 工具包 (需 NVIDIA 显卡)
-- Jupyter Lab
-- OpenCode AI 助手
+包括 JupyterLab、PyTorch 和 scikit-learn。CUDA、ROCm 等厂商 GPU 栈与硬件和版本强相关，不由通用配置自动安装。
 
-## 生物信息学工作流
-
-包含：Bioconda + Nextflow + Singularity
+## 容器开发
 
 ```bash
-linxira-config workflow bio
+linxira-config workflow containers
 ```
 
-预装组件：
-- Bioconda 完整通道
-- Nextflow 流水线引擎
-- Singularity 容器运行时
-- 常用生信工具 (bwa, samtools, star, fastqc 等)
+提供 Podman 与 Distrobox。固定版本的开发环境、服务器式服务和项目依赖应放在容器中，而不是依赖滚动更新的宿主机状态。
+
+## 生物信息学
+
+```bash
+linxira-config workflow bioinformatics
+```
+
+基础配置安装 Apptainer。具体 BWA、SAMtools、Nextflow 等工具应来自经过审核并固定版本的工作流容器；Linxira 不会把未审核的 AUR 配方伪装成官方软件包。
+
+## 产品边界
+
+Linxira OS 面向个人科学工作站和桌面超算。它不推荐作为大规模企业滚动服务器；需要可重复部署的服务和开发环境应采用固定镜像、容器或其他隔离运行时。

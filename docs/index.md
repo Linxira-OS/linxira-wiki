@@ -1,24 +1,21 @@
 # Linxira OS Wiki
 
-欢迎来到 Linxira OS 官方文档。
+Linxira OS 是直接基于 Arch Linux 构建的 KDE Plasma 个人科学工作站发行版，面向桌面超算、科学计算、AI、工程、生物信息和容器开发。
 
-## 关于本文档
+## 文档范围
 
-本文档**只记录 Linxira OS 的独有特性**。对于通用 Linux 问题，请参考：
+本文档只记录 Linxira OS 独有的安装器、Welcome、Shelly、Config Hub、软件目录、工作流和品牌行为。通用 Arch Linux、KDE、systemd、pacman 与硬件配置应优先参考 [Arch Wiki](外部链接/arch-wiki.md)。
 
-- **Arch Wiki** — Linux 世界的维基百科，几乎所有发行版问题都能找到答案
-- **Debian 文档** — Debian 系发行版的权威文档
-- **Linux Mint 文档** — Mint 工具和配置的详细说明
+## Linxira 功能
 
-## 快速导航
+- [Direct Arch 架构](Linxira%20特性/architecture.md)：Welcome、软件目录、Shelly、Calamares 和 Config Hub 的职责边界
+- [Config Hub CLI](Linxira%20特性/config-hub.md)：Arch、npm、pip、AUR 来源管理和系统配置
+- [预装工具](Linxira%20特性/preinstalled-tools.md)：离线基础桌面与默认关闭的第三方来源
+- [工作流配置](Linxira%20特性/workflows.md)：科学、AI、开发、容器和生物信息配置
+- [品牌系统](Linxira%20特性/branding.md)：Logo、壁纸和视觉资产
 
-### Linxira 独有特性
-- [品牌系统](Linxira%20特性/branding.md) — Logo、壁纸、配色方案
-- [配置中心](Linxira%20特性/config-hub.md) — 跨生态源管理和工作流配置
-- [预装工具](Linxira%20特性/preinstalled-tools.md) — mise、Miniforge、Distrobox 等
-- [工作流模板](Linxira%20特性/workflows.md) — 科研、开发、AI/ML 工作流
+## 使用边界
 
-### 外部资源
-- [Arch Wiki](外部链接/arch-wiki.md) — 通用 Linux 知识库
-- [Debian 文档](外部链接/debian.md) — Debian 系发行版文档
-- [Linux Mint](外部链接/mint.md) — Mint 工具文档
+Linxira OS 适合个人工作站和桌面计算节点。由于采用滚动更新，它不推荐用于大规模企业服务器部署。需要固定依赖、可重复构建或服务器式开发环境时，应使用版本固定的容器或其他隔离环境。
+
+Linxira OS 是独立项目，与 Arch Linux 无隶属关系，也未获得 Arch Linux 官方认可。

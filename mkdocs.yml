@@ -15,14 +15,17 @@ theme:
 nav:
   - 首页: index.md
   - Linxira 特性:
+    - Direct Arch 架构: Linxira 特性/architecture.md
     - 品牌系统: Linxira 特性/branding.md
     - 配置中心: Linxira 特性/config-hub.md
     - 预装工具: Linxira 特性/preinstalled-tools.md
     - 工作流模板: Linxira 特性/workflows.md
   - 外部链接:
     - Arch Wiki: 外部链接/arch-wiki.md
-    - Debian 文档: 外部链接/debian.md
-    - Linux Mint: 外部链接/mint.md
+
+not_in_nav: |
+  /外部链接/debian.md
+  /外部链接/mint.md
 
 markdown_extensions:
   - admonition
