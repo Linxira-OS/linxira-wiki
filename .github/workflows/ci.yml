@@ -1,0 +1,46 @@
+name: Verify generated manifest
+
+# ai/manifest.json 是生成物。数据源在别的仓库里(governance/repositories.yaml 与各包
+# PKGBUILD), 那些仓库更新时本仓库没有 push, 所以除了 push 还挂每日定时检查。
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check out the packages repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: Linxira-OS/packages
+          path: workspace/packages
+      - name: Check out linxira-components
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: Linxira-OS/linxira-components
+          path: workspace/linxira-components
+      - name: Check out linxira-recovery-diagnostics
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: Linxira-OS/linxira-recovery-diagnostics
+          path: workspace/linxira-recovery-diagnostics
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.x"
+      - name: Install test dependencies
+        run: python -m pip install pytest
+      - name: Regenerate the manifest and compare
+        env:
+          LINXIRA_WORKSPACE: ${{ github.workspace }}/workspace
+        run: python -m pytest -q tests/ -k "generated_manifest or privilege_rules"

@@ -14,6 +14,12 @@ theme:
 
 nav:
   - 首页: index.md
+  - 项目总览:
+      - 索引: 项目总览/index.md
+      - Config CLI: 项目总览/linxira-config.md
+      - Components: 项目总览/linxira-components.md
+      - 恢复诊断: 项目总览/linxira-recovery.md
+      - 工作区守护: 项目总览/workspace-guard.md
   - Linxira 特性:
     - Direct Arch 架构: Linxira 特性/architecture.md
     - 品牌系统: Linxira 特性/branding.md

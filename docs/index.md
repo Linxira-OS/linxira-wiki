@@ -6,6 +6,8 @@ Linxira OS 是直接基于 Arch Linux 构建的 KDE Plasma 个人科学工作站
 
 本文档只记录 Linxira OS 独有的安装器、Welcome、Shelly、Config Hub、软件目录、工作流和品牌行为。通用 Arch Linux、KDE、systemd、pacman 与硬件配置应优先参考 [Arch Wiki](外部链接/arch-wiki.md)。
 
+本 wiki 讨论**每个项目的大体设计流程**：为什么存在、职责边界、何时用哪个、权限模型。完整清单见 [项目总览](项目总览/index.md)。具体项目的内部设计、数据结构与实现决策不在本 wiki，在各项目自己仓库的 `document/` 目录。
+
 ## Linxira 功能
 
 - [Direct Arch 架构](Linxira%20特性/architecture.md)：Welcome、软件目录、Shelly、Calamares 和 Config Hub 的职责边界

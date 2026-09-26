@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+# Linxira 官方手册阅读器。
+#
+# 全部子命令都是只读: 不提权、不需要授权、不写任何文件。
+# 人读形态是 mkdocs 站点, AI 形态是同源内容 + ai/manifest.json, 本命令读的是后者。
+set -euo pipefail
+umask 022
+
+WIKI_ROOT_DEFAULT="/usr/share/linxira/wiki"
+WIKI_ROOT=""
+MANIFEST=""
+DOCS=""
+TOPICS=""
+
+fail() {
+    printf 'ERROR: %s\n' "$1" >&2
+    exit "${2:-1}"
+}
+
+set_root() {
+    WIKI_ROOT=${1%/}
+    MANIFEST="${WIKI_ROOT}/ai/manifest.json"
+    DOCS="${WIKI_ROOT}/docs"
+    TOPICS="${WIKI_ROOT}/ai/topics"
+}
+
+usage() {
+    cat <<'EOF'
+Usage: linxira-wiki [--root <dir>] <command> [argument]
+
+  list                 列出 docs/ 下所有页面
+  manifest             打印 ai/manifest.json (AI 入口索引)
+  show <topic>         打印一个主题: ai/topics/<topic>.md, 找不到再找 docs/**/<topic>.md
+  search <keyword>     在手册全文中检索, 输出命中的文件列表
+  path                 打印手册安装目录
+  help                 显示本帮助
+
+--root <dir>           读另一个手册目录(默认 /usr/share/linxira/wiki), 用于读未安装的检出副本。
+
+所有子命令只读, 免 root, 免授权。
+主题清单见 manifest.json 的 topics 字段。
+EOF
+}
+
+cmd_list() {
+    [ -d "$DOCS" ] || fail "wiki content not installed: ${DOCS}" 3
+    find "$DOCS" -type f -name '*.md' | sort
+}
+
+cmd_manifest() {
+    [ -f "$MANIFEST" ] || fail "manifest not installed" 3
+    cat "$MANIFEST"
+}
+
+cmd_show() {
+    local topic=${1:-}
+    [ -n "$topic" ] || fail "usage: linxira-wiki show <topic>" 4
+    # 只接受 basename: 带 / 的参数会让 show ../../etc/shadow 读到包外。
+    case "$topic" in
+        */*) fail "no such topic: ${topic}" 4 ;;
+    esac
+    if [ -f "${TOPICS}/${topic}.md" ]; then
+        cat "${TOPICS}/${topic}.md"
+        return 0
+    fi
+    if [ -d "$DOCS" ]; then
+        local match found=0
+        while IFS= read -r match; do
+            [ -n "$match" ] || continue
+            [ "$found" -eq 0 ] || printf '\n---\n\n'
+            cat "$match"
+            found=1
+        done < <(find "$DOCS" -type f -name "${topic}.md" | sort)
+        [ "$found" -eq 1 ] && return 0
+    fi
+    fail "no such topic: ${topic}" 4
+}
+
+cmd_search() {
+    local keyword=${1:-}
+    [ -n "$keyword" ] || fail "usage: linxira-wiki search <keyword>" 2
+    [ -d "$WIKI_ROOT" ] || fail "wiki content not installed: ${WIKI_ROOT}" 3
+    # -- 防止以 - 开头的 keyword 被当成选项; -l 只出文件名。无命中时 grep 返回 1。
+    grep -rl -- "$keyword" "$WIKI_ROOT" || true
+}
+
+set_root "$WIKI_ROOT_DEFAULT"
+if [ "${1:-}" = "--root" ]; then
+    [ "$#" -ge 2 ] || fail "usage: linxira-wiki --root <dir> <command>"
+    set_root "$2"
+    shift 2
+fi
+
+case "${1:-help}" in
+    help|--help|-h)
+        usage
+        ;;
+    list)
+        cmd_list
+        ;;
+    manifest)
+        cmd_manifest
+        ;;
+    show)
+        shift
+        cmd_show "$@"
+        ;;
+    search)
+        shift
+        cmd_search "$@"
+        ;;
+    path)
+        printf '%s\n' "$WIKI_ROOT"
+        ;;
+    *)
+        usage
+        fail "unknown command: $1" 2
+        ;;
+esac

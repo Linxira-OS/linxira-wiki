@@ -30,6 +30,10 @@ jobs:
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - name: Install documentation dependencies
         run: python -m pip install -r requirements.txt
+      - name: Install test dependencies
+        run: python -m pip install pytest
+      - name: Test the reader and the manifest
+        run: python -m pytest -q tests/
       - name: Build documentation
         run: mkdocs build --strict
       - name: Upload Pages artifact

@@ -1,0 +1,326 @@
+{
+  "audience": [
+    "human",
+    "ai"
+  ],
+  "boundary": "本包覆盖跨项目边界与操作逻辑。各项目内部设计、数据结构、实现决策在其自身仓库的 document/ 目录。",
+  "how_to_use": {
+    "for_agents": "Read this manifest, then only the topics relevant to the request. 深入设计不在本包 — 去该项目仓库的 document/ 目录。",
+    "for_humans": "mkdocs 站点，或 linxira-wiki list / show <topic>"
+  },
+  "privilege_rules": [
+    "Never invoke sudo, su, doas, or run0 directly.",
+    "Root work goes through linxira-components; Polkit prompts the user for each action.",
+    "Read-only commands (list, status, show) never need root.",
+    "If authorization is denied, stop and report — do not retry or find another path."
+  ],
+  "repositories": [
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-os",
+      "lifecycle": "active",
+      "name": "linxira-os",
+      "owns": [
+        "product-architecture",
+        "repository-governance",
+        "support-matrix",
+        "release-manifests"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-iso-direct",
+      "lifecycle": "active",
+      "name": "linxira-iso-direct",
+      "owns": [
+        "live-profile",
+        "installer-configuration",
+        "target-manifests",
+        "iso-build"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/packages",
+      "lifecycle": "active",
+      "name": "packages",
+      "owns": [
+        "pkgbuilds",
+        "package-ci",
+        "signed-repository-publication"
+      ]
+    },
+    {
+      "desc": "Reviewed software catalog and schema for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-catalog",
+      "lifecycle": "active",
+      "name": "linxira-catalog",
+      "owns": [
+        "catalog-schema",
+        "applications",
+        "capabilities",
+        "presets",
+        "desktop-metadata"
+      ]
+    },
+    {
+      "cli": [
+        "/usr/bin/linxira-components"
+      ],
+      "desc": "Catalog-bound transaction planning and receipt backend for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-components",
+      "lifecycle": "active",
+      "name": "linxira-components",
+      "owns": [
+        "transaction-planning",
+        "confirmation",
+        "privileged-apply",
+        "receipts"
+      ],
+      "privilege": "polkit"
+    },
+    {
+      "desc": "Catalog-bound application and capability manager for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-package-center",
+      "lifecycle": "active",
+      "name": "linxira-package-center",
+      "owns": [
+        "package-center-ui",
+        "installed-state-presentation"
+      ]
+    },
+    {
+      "desc": "Nested capability bundle and component manager for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-component-manager",
+      "lifecycle": "active",
+      "name": "linxira-component-manager",
+      "owns": [
+        "component-manager-ui",
+        "capability-state-presentation"
+      ]
+    },
+    {
+      "desc": "User-level game library and compatibility manager for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-gaming-manager",
+      "lifecycle": "active",
+      "name": "linxira-gaming-manager",
+      "owns": [
+        "gaming-library",
+        "compatibility-launch",
+        "user-backup"
+      ]
+    },
+    {
+      "desc": "System update notifier and maintenance assistant for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-update",
+      "lifecycle": "active",
+      "name": "linxira-update",
+      "owns": [
+        "system-update",
+        "update-status",
+        "update-tray"
+      ]
+    },
+    {
+      "desc": "First-online completion workflow for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-completion-agent",
+      "lifecycle": "active",
+      "name": "linxira-completion-agent",
+      "owns": [
+        "first-online-plan-presentation",
+        "completion-state",
+        "transaction-delegation"
+      ]
+    },
+    {
+      "desc": "Linxira hardware detection and driver configuration tool (full CHWD port)",
+      "detail": "https://github.com/Linxira-OS/linxira-hwd-detector",
+      "lifecycle": "active",
+      "name": "linxira-hwd-detector",
+      "owns": [
+        "read-only-hardware-detection",
+        "hardware-fact-contract"
+      ],
+      "upstream": "CachyOS/chwd@1.23.0"
+    },
+    {
+      "desc": "Hardware driver reporting, fixed planning, and root-owned diagnostics for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-hardware-driver-manager",
+      "lifecycle": "active",
+      "name": "linxira-hardware-driver-manager",
+      "owns": [
+        "driver-policy-ui",
+        "kernel-dkms-report",
+        "driver-plan"
+      ]
+    },
+    {
+      "desc": "Fixed-policy kernel, boot, and initramfs reporting for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-kernel-manager",
+      "lifecycle": "active",
+      "name": "linxira-kernel-manager",
+      "owns": [
+        "kernel-policy-ui",
+        "boot-state-report",
+        "kernel-plan"
+      ]
+    },
+    {
+      "cli": [
+        "/usr/bin/linxira-recovery-diagnostics",
+        "/usr/bin/linxira-recovery-diagnostics-gui"
+      ],
+      "desc": "Read-only recovery readiness, repair planning, and support bundles for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-recovery-diagnostics",
+      "lifecycle": "active",
+      "name": "linxira-recovery-diagnostics",
+      "owns": [
+        "recovery-readiness",
+        "repair-plan",
+        "private-support-bundle"
+      ],
+      "privilege": "polkit"
+    },
+    {
+      "desc": "Safe Plasma-native workstation control center for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-welcome",
+      "lifecycle": "active",
+      "name": "linxira-welcome",
+      "owns": [
+        "welcome-status",
+        "lifecycle-guidance",
+        "fixed-tool-routing"
+      ]
+    },
+    {
+      "cli": [
+        "/usr/bin/linxira-config"
+      ],
+      "desc": "Configuration and diagnostics CLI for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-config-hub",
+      "lifecycle": "active",
+      "name": "linxira-config-hub",
+      "owns": [
+        "linxira-cli",
+        "diagnostics",
+        "runtime-adapters",
+        "source-adapters",
+        "ssh-network-plans"
+      ],
+      "privilege": "polkit"
+    },
+    {
+      "desc": "Canonical artwork and visual identity for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-artwork",
+      "lifecycle": "active",
+      "name": "linxira-artwork",
+      "owns": [
+        "brand-assets",
+        "terminal-artwork",
+        "visual-policy"
+      ]
+    },
+    {
+      "desc": "Pacman hooks for Linxira OS system identification",
+      "detail": "https://github.com/Linxira-OS/linxira-hooks",
+      "lifecycle": "review-required",
+      "name": "linxira-hooks",
+      "owns": [
+        "pacman-hooks",
+        "reboot-state"
+      ]
+    },
+    {
+      "cli": [
+        "/usr/bin/linxira-wiki"
+      ],
+      "desc": "Official Linxira OS system handbook, readable by humans and AI agents",
+      "detail": "https://github.com/Linxira-OS/linxira-wiki",
+      "lifecycle": "active",
+      "name": "linxira-wiki",
+      "owns": [
+        "user-documentation"
+      ],
+      "privilege": "none"
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/Linxira-OS.github.io",
+      "lifecycle": "active",
+      "name": "Linxira-OS.github.io",
+      "owns": [
+        "public-website",
+        "publication-endpoint"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-hello",
+      "lifecycle": "deprecated",
+      "name": "linxira-hello",
+      "owns": []
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-iso",
+      "lifecycle": "deprecated",
+      "name": "linxira-iso",
+      "owns": []
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/extendai-lab-cli",
+      "lifecycle": "independent",
+      "name": "extendai-lab-cli",
+      "owns": [
+        "extendai-cli"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/extendai-lab-Studio",
+      "lifecycle": "independent",
+      "name": "extendai-lab-Studio",
+      "owns": [
+        "extendai-studio"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-pulse",
+      "lifecycle": "independent",
+      "name": "linxira-pulse",
+      "owns": [
+        "ai-assistant"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-skills",
+      "lifecycle": "independent",
+      "name": "linxira-skills",
+      "owns": [
+        "skill-platform"
+      ]
+    }
+  ],
+  "schema": "org.linxira.wiki.manifest.v1",
+  "topics": [
+    {
+      "name": "first-boot",
+      "path": "ai/topics/first-boot.md",
+      "summary": "新机器第一次开机，按什么顺序做什么"
+    },
+    {
+      "name": "ownership",
+      "path": "ai/topics/ownership.md",
+      "summary": "每个仓库拥有什么，跨项目边界划在哪"
+    },
+    {
+      "name": "privilege",
+      "path": "ai/topics/privilege.md",
+      "summary": "提权模型 — 任何时候都不要自己提权"
+    },
+    {
+      "name": "recovery",
+      "path": "ai/topics/recovery.md",
+      "summary": "系统出问题时先取只读证据，再谈修复"
+    },
+    {
+      "name": "workspace-guard",
+      "path": "ai/topics/workspace-guard.md",
+      "summary": "防 agent 误删工作区的恢复点机制"
+    }
+  ],
+  "wiki_version": "0.1.0"
+}
