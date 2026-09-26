@@ -17,7 +17,7 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 |---|---|---|
 | 快照与恢复的执行 | [`linxira-components`](linxira-components.md) | `guard_store` / `guard_worker` / `guard_cli` / 定时器 |
 | 分区、容量选择、启用 | [`linxira-config`](linxira-config.md) | `linxira-config workspace-guard enable` |
-| 装机时创建分区 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | Calamares `workspaceGuard` 段 |
+| 装机时创建分区 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | `shellprocess@linxira-workspace-guard` 装机脚本 |
 | 文档 | 本 wiki | 本页与 `ai/topics/workspace-guard.md` |
 
 **不归它**：不备份系统本身（那是 timeshift 的事），不备份用户主目录整体，
@@ -56,19 +56,28 @@ linxira-components guard list ~/Linxira-OS --json
 ### 恢复点操作（Polkit 授权）
 
 ```bash
-linxira-components guard register ~/Linxira-OS
 linxira-components guard snapshot ~/Linxira-OS
 linxira-components guard restore <id> --target ~/ws-restored
-linxira-components guard unregister ~/Linxira-OS
 ```
 
-## 何时需要 root
+### 登记工作区（root）
 
-- **不需要**：`workspace-guard status`、`handbook`、`guard status`、`guard list`。
-- **需要**：`workspace-guard enable` / `disable`（root 直接执行）、
-  `guard init` / `register` / `unregister` / `snapshot` / `restore`（Polkit 弹窗）。
-- **定时器**：`linxira-workspace-guard-snapshot.timer` 以 root 身份每 30 分钟跑一次，
-  不依赖 agent 自觉，也不依赖用户在场。
+```bash
+sudo linxira-components guard init
+sudo linxira-components guard register ~/Linxira-OS
+sudo linxira-components guard unregister ~/Linxira-OS
+```
+
+登记写的是守护仓库自己的 root 登记表，没有用户可见的副作用，也没有需要回滚的东西，
+所以只允许管理员执行，不开一个能被反复触发的提权入口。
+非 root 运行会直接拒绝，不会静默半途而废。
+
+## 恢复点的生命周期
+
+守护分区不写进 `/etc/fstab`，所以开机时不挂载。每次开机后由 root 侧重新挂载：
+定时器与 `snapshot` / `restore` 动手前按配置里的 `store_uuid` 找到设备并挂到 store 路径，
+挂不上就如实报错并跳过，不静默把快照写到系统盘上。
+定时器以 root 身份每 30 分钟跑一次，不依赖 agent 自觉，也不依赖用户在场。
 
 ## 三条不变量
 
@@ -81,6 +90,6 @@ linxira-components guard unregister ~/Linxira-OS
 
 ## 深入设计
 
-数据结构、保留策略与 restic 仓库布局见
+数据结构、保留策略与快照目录布局见
 [`linxira-components`](https://github.com/Linxira-OS/linxira-components) 仓库的 `document/` 目录。
 机器可读摘要见 `linxira-wiki show workspace-guard`。

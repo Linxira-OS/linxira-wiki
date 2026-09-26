@@ -46,14 +46,23 @@ sudo linxira-config workspace-guard disable   # 只停定时器，保留仓库�
 ## agent 能做什么（Polkit 授权）
 
 ```bash
-linxira-components guard register ~/Linxira-OS     # 注册工作区
-linxira-components guard snapshot ~/Linxira-OS     # 立刻做一个手动快照
+linxira-components guard snapshot ~/Linxira-OS     # 立刻做一次手动快照
 linxira-components guard restore <id> --target ~/ws-restored
-linxira-components guard list ~/Linxira-OS
-linxira-components guard unregister ~/Linxira-OS
 ```
 
-每一条都出 Polkit 弹窗，权限在用户手里。`guard list` / `guard status` 只读，不弹窗。
+这两条出 Polkit 弹窗，agent 可发起，权限在用户手里。
+
+## 登记工作区（管理员）
+
+```bash
+sudo linxira-components guard init                # 建守护仓库骨架
+sudo linxira-components guard register ~/Linxira-OS
+sudo linxira-components guard unregister ~/Linxira-OS
+```
+
+这三条写的是 root 拥有的登记表，没有用户可见的副作用，也没有需要回滚的东西，
+所以只允许管理员执行，不开一个能被反复触发的提权入口。
+非 root 运行会直接拒绝，不会静默半途而废。
 
 ## 恢复的铁律
 
@@ -73,4 +82,4 @@ ls -a ~/ws-restored          # 有 .git 与你的文件，没有 guard-manifest.
 
 ## 深一层
 
-内部数据结构、restic 仓库布局与保留策略见 `linxira-components` 仓库的 `document/`。
+内部数据结构、快照目录布局与保留策略见 `linxira-components` 仓库的 `document/`。
