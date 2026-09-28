@@ -20,6 +20,7 @@ nav:
       - Components: 项目总览/linxira-components.md
       - 恢复诊断: 项目总览/linxira-recovery.md
       - 工作区守护: 项目总览/workspace-guard.md
+      - WSL 发行版: 项目总览/linxira-wsl.md
   - Linxira 特性:
     - Direct Arch 架构: Linxira 特性/architecture.md
     - 品牌系统: Linxira 特性/branding.md
