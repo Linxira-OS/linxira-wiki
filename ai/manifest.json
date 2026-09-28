@@ -317,6 +317,11 @@
       "summary": "系统出问题时先取只读证据，再谈修复"
     },
     {
+      "name": "stacks-and-env",
+      "path": "ai/topics/stacks-and-env.md",
+      "summary": "软件栈安装与环境变量的一站式入口（config 转发 component-manager）"
+    },
+    {
       "name": "workspace-guard",
       "path": "ai/topics/workspace-guard.md",
       "summary": "防 agent 误删工作区的恢复点机制"
