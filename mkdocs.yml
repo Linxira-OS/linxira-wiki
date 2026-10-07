@@ -18,6 +18,7 @@ nav:
       - 索引: 项目总览/index.md
       - Config CLI: 项目总览/linxira-config.md
       - Components: 项目总览/linxira-components.md
+      - 更新助手: 项目总览/linxira-update.md
       - 恢复诊断: 项目总览/linxira-recovery.md
       - 工作区守护: 项目总览/workspace-guard.md
       - WSL 发行版: 项目总览/linxira-wsl.md

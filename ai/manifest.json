@@ -307,6 +307,11 @@
       "summary": "新机器第一次开机，按什么顺序做什么"
     },
     {
+      "name": "installer-selection",
+      "path": "ai/topics/installer-selection.md",
+      "summary": "安装期组件选择回执 —— installer-selection.json 记录装了什么、延后了什么，组件管理器据此预选"
+    },
+    {
       "name": "ownership",
       "path": "ai/topics/ownership.md",
       "summary": "每个仓库拥有什么，跨项目边界划在哪"
@@ -325,6 +330,16 @@
       "name": "stacks-and-env",
       "path": "ai/topics/stacks-and-env.md",
       "summary": "软件栈安装与环境变量的一站式入口（config 转发 component-manager）"
+    },
+    {
+      "name": "update-cli",
+      "path": "ai/topics/update-cli.md",
+      "summary": "linxira-update 命令面速查 —— 参数、全部配置键、status.json 字段与 user timer"
+    },
+    {
+      "name": "updates-and-snapshots",
+      "path": "ai/topics/updates-and-snapshots.md",
+      "summary": "滚动仓库与快照一体化 —— 任何 pacman 事务前自动快照、可引导回滚，EnableAutoApply 开启后全自动升级"
     },
     {
       "name": "workspace-guard",

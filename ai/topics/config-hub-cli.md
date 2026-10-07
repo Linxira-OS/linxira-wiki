@@ -40,11 +40,14 @@ linxira-config stack list|status|install|tui
 linxira-config workspace-guard status [--json]|handbook
 sudo linxira-config workspace-guard enable|disable
 
+# 快照一体化（enable/disable 需 root；机制见 updates-and-snapshots 主题）
+linxira-config timeshift status              # 版本/配置/hook/grub-btrfsd/最近快照
+sudo linxira-config timeshift enable|disable # 调 /usr/share/linxira/timeshift/linxira-timeshift-enable.sh（幂等）
+
 # 状态与安全
 linxira-config security status
 linxira-config security ufw allow <port>
 linxira-config net diag [--json] | dns | dns set <ip>
-linxira-config timeshift status
 linxira-config headless on           # 下次启动不加载桌面
 linxira-config info | status | tui
 ```
@@ -57,8 +60,10 @@ linxira-config info | status | tui
   Calamares 会话日志、pacman.log、失败单元与本次开机错误日志。
 - `ssh on` 直接可用（无需事务后端）：live 会话内 installer 用户免密
   sudo，装机后普通用户经 wheel/sudo。live 会话 root 密码为 linxira。
-- `mirror` 的 npm/pip/aur/go 源按用户生效（npm config / pip config /
-  go env -w）；Arch 与 Flatpak 走系统配置。Miniforge 仅放行
+- `mirror` 的 pip/aur/go 源按用户生效（pip config / git insteadOf，仅改
+  clone 流量 / go env -w）；npm 记 `LINXIRA_NPM_REGISTRY` 偏好到
+  /etc/profile.d/linxira-env.sh，npm login/publish 永远走官方 registry。
+  Arch 与 Flatpak 走系统配置。Miniforge 仅放行
   conda-forge / bioconda。
 - `rdp`、`virt kvm-on/docker-on`、`security harden`、`power` 写操作
   刻意等待事务后端，只读 status 可用——不要试图绕过。

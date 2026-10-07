@@ -3,10 +3,11 @@
 本 wiki 讨论**每个项目的大体设计流程**：为什么存在、职责边界、何时用哪个、权限模型。
 具体项目的内部设计、数据结构与实现决策不在本 wiki，在各项目自己仓库的 `document/` 目录。
 
-本页是全表。日常只需要记住四个项目，它们是 agent 与人会直接操作的那四个：
+本页是全表。日常只需要记住五个项目，它们是 agent 与人会直接操作的那五个：
 
 - [Config CLI](linxira-config.md) —— 改设置、查网络与 SSH、镜像源、守护的启用入口
 - [Components](linxira-components.md) —— 装软件与一切需要 root 的事务
+- [更新助手](linxira-update.md) —— 检查与应用系统更新、托盘提醒、快照一体化的更新侧
 - [恢复诊断](linxira-recovery.md) —— 系统出问题时先取只读证据
 - [工作区守护](workspace-guard.md) —— 跨项目机制，防 agent 误删工作区
 

@@ -16,6 +16,8 @@ privilege: user
 先更新再配任何东西，否则配的东西可能被后续更新覆盖。
 
 agent 要更新包时直接用 `pacman`，不必绕 `linxira-update`。
+机制（滚动仓库、事务前自动快照、可选的全自动更新 EnableAutoApply）
+见 `updates-and-snapshots` 与 `update-cli` 主题。
 
 ## 2. 配镜像源与网络
 
@@ -36,6 +38,9 @@ linxira-config ssh status            # 需要远程接入时再开
 ```bash
 linxira-components list --catalog /usr/share/linxira/catalog/catalog-v3.json --json
 ```
+
+安装时被延后的组件已由回执预选：组件管理器 GUI 打开即预勾选
+（机制见 `installer-selection` 主题）。
 
 ## 4. 注册工作区守护（可选但建议）
 
