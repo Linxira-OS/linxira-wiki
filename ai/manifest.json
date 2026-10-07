@@ -297,6 +297,11 @@
   "schema": "org.linxira.wiki.manifest.v1",
   "topics": [
     {
+      "name": "config-hub-cli",
+      "path": "ai/topics/config-hub-cli.md",
+      "summary": "linxira-config 命令面速查 —— SSH、诊断日志上传、镜像源、安全与系统状态的一站式入口"
+    },
+    {
       "name": "first-boot",
       "path": "ai/topics/first-boot.md",
       "summary": "新机器第一次开机，按什么顺序做什么"
@@ -325,11 +330,6 @@
       "name": "workspace-guard",
       "path": "ai/topics/workspace-guard.md",
       "summary": "防 agent 误删工作区的恢复点机制"
-    },
-    {
-      "name": "config-hub-cli",
-      "path": "ai/topics/config-hub-cli.md",
-      "summary": "linxira-config 命令面速查 —— SSH、诊断日志上传、镜像源、安全与系统状态的一站式入口"
     }
   ],
   "wiki_version": "0.1.0"
