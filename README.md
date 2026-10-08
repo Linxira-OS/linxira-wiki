@@ -14,8 +14,9 @@ not here.
 
 ## Contents
 
-- **首页**: what Linxira OS is (a KDE Plasma personal scientific workstation
-  distribution built directly on Arch Linux) and the documentation scope.
+- **首页**: what Linxira OS is (a KDE Plasma / COSMIC personal scientific
+  workstation distribution built directly on Arch Linux) and the documentation
+  scope.
 - **项目总览**: the cross-project map — Config CLI, Components, Recovery
   Diagnostics, Workspace Guard, and the WSL distribution — with the ownership
   table generated from `linxira-os/governance/repositories.yaml`.
@@ -74,8 +75,8 @@ Linxira OS 官方 wiki，使用 MkDocs（Material 主题）构建，发布于
 
 ## 内容
 
-- **首页**：Linxira OS 是什么（直接基于 Arch Linux 构建的 KDE Plasma 个人科学
-  工作站发行版）与文档范围。
+- **首页**：Linxira OS 是什么（直接基于 Arch Linux 构建的 KDE Plasma / COSMIC
+  个人科学工作站发行版）与文档范围。
 - **项目总览**：跨项目地图 —— Config CLI、Components、恢复诊断、工作区守护与
   WSL 发行版 —— 附由 `linxira-os/governance/repositories.yaml` 生成的归属表。
 - **Linxira 特性**：Direct Arch 架构、品牌系统、配置中心、预装工具与工作流模板

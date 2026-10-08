@@ -48,6 +48,24 @@
       ]
     },
     {
+      "detail": "https://github.com/Linxira-OS/linxira-packages",
+      "lifecycle": "active",
+      "name": "linxira-packages",
+      "owns": [
+        "package-repository-hosting",
+        "repository-metadata"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-keys",
+      "lifecycle": "active",
+      "name": "linxira-keys",
+      "owns": [
+        "signing-keys",
+        "keyring-distribution"
+      ]
+    },
+    {
       "desc": "Reviewed software catalog and schema for Linxira OS",
       "detail": "https://github.com/Linxira-OS/linxira-catalog",
       "lifecycle": "active",
@@ -247,6 +265,15 @@
       "owns": [
         "public-website",
         "publication-endpoint"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-wsl",
+      "lifecycle": "active",
+      "name": "linxira-wsl",
+      "owns": [
+        "wsl-distribution-image",
+        "wsl-rootfs-build"
       ]
     },
     {

@@ -21,6 +21,8 @@
 | [`linxira-os`](https://github.com/Linxira-OS/linxira-os) | product-architecture、repository-governance、support-matrix、release-manifests | active |
 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | live-profile、installer-configuration、target-manifests、iso-build | active |
 | [`packages`](https://github.com/Linxira-OS/packages) | pkgbuilds、package-ci、signed-repository-publication | active |
+| [`linxira-packages`](https://github.com/Linxira-OS/linxira-packages) | package-repository-hosting、repository-metadata | active |
+| [`linxira-keys`](https://github.com/Linxira-OS/linxira-keys) | signing-keys、keyring-distribution | active |
 | [`linxira-catalog`](https://github.com/Linxira-OS/linxira-catalog) | catalog-schema、applications、capabilities、presets、desktop-metadata | active |
 | [`linxira-components`](https://github.com/Linxira-OS/linxira-components) | transaction-planning、confirmation、privileged-apply、receipts | active |
 | [`linxira-package-center`](https://github.com/Linxira-OS/linxira-package-center) | package-center-ui、installed-state-presentation | active |
@@ -38,6 +40,7 @@
 | [`linxira-hooks`](https://github.com/Linxira-OS/linxira-hooks) | pacman-hooks、reboot-state | review-required |
 | [`linxira-wiki`](https://github.com/Linxira-OS/linxira-wiki) | user-documentation | active |
 | [`Linxira-OS.github.io`](https://github.com/Linxira-OS/Linxira-OS.github.io) | public-website、publication-endpoint | active |
+| [`linxira-wsl`](https://github.com/Linxira-OS/linxira-wsl) | wsl-distribution-image、wsl-rootfs-build | active |
 | [`linxira-hello`](https://github.com/Linxira-OS/linxira-hello) | — | deprecated |
 | [`linxira-iso`](https://github.com/Linxira-OS/linxira-iso) | — | deprecated |
 | [`extendai-lab-cli`](https://github.com/Linxira-OS/extendai-lab-cli) | extendai-cli | independent |
