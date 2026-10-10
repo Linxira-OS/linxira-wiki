@@ -197,6 +197,17 @@
       "privilege": "polkit"
     },
     {
+      "desc": "Crash capture, triage, and user-approved agent wake-up for Linxira OS",
+      "detail": "https://github.com/Linxira-OS/linxira-crash-watch",
+      "lifecycle": "active",
+      "name": "linxira-crash-watch",
+      "owns": [
+        "crash-diagnosis",
+        "crash-window",
+        "debug-workspace"
+      ]
+    },
+    {
       "desc": "Safe Plasma-native workstation control center for Linxira OS",
       "detail": "https://github.com/Linxira-OS/linxira-welcome",
       "lifecycle": "active",
