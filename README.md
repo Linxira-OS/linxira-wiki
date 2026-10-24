@@ -114,3 +114,8 @@ mkdocs serve                      # http://localhost:8000
 ```
 
 发布站点由本仓库部署到 https://linxira-os.github.io/linxira-wiki/。
+
+## License
+
+- 站点代码（构建脚本、组件）: MIT（见 `LICENSE`）。
+- 文档内容（`docs/**`、页面正文）: CC BY-SA 4.0，与官网法律页一致。
