@@ -12,7 +12,7 @@ Windows 侧的原生答案。linxira-wsl 把 Linxira 的工具链以 rootfs 发�
 | | ISO 安装 | WSL |
 |---|---|---|
 | 内核/引导/分区 | 安装器处理 | 不适用（WSL 自带内核） |
-| 桌面 | catalog 选择（plasma/cosmic/server/最小） | 无会话；GUI 工具走 WSLg（Win11） |
+| 桌面 | catalog 选择（Plasma / COSMIC / 无桌面） | 无会话；GUI 工具走 WSLg（Win11） |
 | 软件栈 | 装机时选择 / component-manager | `linxira-component-manager`（同一条链） |
 | 工作区守护 | 定时器每 30 分钟 | 不默认启用（见下） |
 | 网络管理 | NetworkManager | WSL 侧管理，刻意不装 NetworkManager |
