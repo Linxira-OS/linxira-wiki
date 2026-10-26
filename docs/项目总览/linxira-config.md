@@ -28,7 +28,14 @@ SSH 服务与密钥、UFW 防火墙、日志采集与上传、Timeshift 快捷�
 linxira-config mirror arch speed            # 测延迟
 linxira-config mirror arch auto             # 选最快的
 linxira-config net diag                     # 网络诊断
+linxira-config ssh on                       # 持久开启 SSH(写入密码登录并启动 sshd)
+linxira-config ssh off                      # 持久关闭
 linxira-config ssh status                   # SSH 状态
+# 临时开启(仅本次, 重启后关闭, 适合一次性排障):
+#   sudo systemctl start sshd
+#   sudo systemctl stop sshd
+# 首次连接(跳过交互指纹、8 秒超时):
+#   ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 用户名@IP
 linxira-config timeshift status             # 快照后端状态
 linxira-config workspace-guard status       # 工作区守护状态
 linxira-config help                         # 完整命令表
