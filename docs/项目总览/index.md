@@ -3,12 +3,13 @@
 本 wiki 讨论**每个项目的大体设计流程**：为什么存在、职责边界、何时用哪个、权限模型。
 具体项目的内部设计、数据结构与实现决策不在本 wiki，在各项目自己仓库的 `document/` 目录。
 
-本页是全表。日常只需要记住五个项目，它们是 agent 与人会直接操作的那五个：
+本页是全表。日常只需要记住六个项目，它们是 agent 与人会直接操作的那六个：
 
 - [Config CLI](linxira-config.md) —— 改设置、查网络与 SSH、镜像源、守护的启用入口
 - [Components](linxira-components.md) —— 装软件与一切需要 root 的事务
 - [更新助手](linxira-update.md) —— 检查与应用系统更新、托盘提醒、快照一体化的更新侧
 - [恢复诊断](linxira-recovery.md) —— 系统出问题时先取只读证据
+- [崩溃监视](linxira-crash-watch.md) —— 捕获崩溃现场、写文本证据，用户选动作后才唤起 agent
 - [工作区守护](workspace-guard.md) —— 跨项目机制，防 agent 误删工作区
 
 ## 全表
@@ -34,6 +35,7 @@
 | [`linxira-hardware-driver-manager`](https://github.com/Linxira-OS/linxira-hardware-driver-manager) | driver-policy-ui、kernel-dkms-report、driver-plan | active |
 | [`linxira-kernel-manager`](https://github.com/Linxira-OS/linxira-kernel-manager) | kernel-policy-ui、boot-state-report、kernel-plan | active |
 | [`linxira-recovery-diagnostics`](https://github.com/Linxira-OS/linxira-recovery-diagnostics) | recovery-readiness、repair-plan、private-support-bundle | active |
+| [`linxira-crash-watch`](https://github.com/Linxira-OS/linxira-crash-watch) | crash-diagnosis、crash-window、debug-workspace | active |
 | [`linxira-welcome`](https://github.com/Linxira-OS/linxira-welcome) | welcome-status、lifecycle-guidance、fixed-tool-routing | active |
 | [`linxira-config-hub`](https://github.com/Linxira-OS/linxira-config-hub) | linxira-cli、diagnostics、runtime-adapters、source-adapters、ssh-network-plans | active |
 | [`linxira-artwork`](https://github.com/Linxira-OS/linxira-artwork) | brand-assets、terminal-artwork、visual-policy | active |
