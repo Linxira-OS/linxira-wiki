@@ -330,6 +330,96 @@
       "owns": [
         "skill-platform"
       ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-fish-config",
+      "lifecycle": "paused",
+      "name": "linxira-fish-config",
+      "owns": [
+        "fish-shell-configuration"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-zsh-config",
+      "lifecycle": "paused",
+      "name": "linxira-zsh-config",
+      "owns": [
+        "zsh-shell-configuration"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-gnome-settings",
+      "lifecycle": "paused",
+      "name": "linxira-gnome-settings",
+      "owns": [
+        "gnome-desktop-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-kde-settings",
+      "lifecycle": "paused",
+      "name": "linxira-kde-settings",
+      "owns": [
+        "kde-plasma-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-hypr-noctalia",
+      "lifecycle": "paused",
+      "name": "linxira-hypr-noctalia",
+      "owns": [
+        "hyprland-desktop-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-niri-noctalia",
+      "lifecycle": "paused",
+      "name": "linxira-niri-noctalia",
+      "owns": [
+        "niri-desktop-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-mangowc-dms",
+      "lifecycle": "paused",
+      "name": "linxira-mangowc-dms",
+      "owns": [
+        "mangowc-desktop-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-settings",
+      "lifecycle": "paused",
+      "name": "linxira-settings",
+      "owns": [
+        "system-settings-defaults"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-wallpapers",
+      "lifecycle": "paused",
+      "name": "linxira-wallpapers",
+      "owns": [
+        "wallpaper-assets"
+      ]
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-calamares",
+      "lifecycle": "deprecated",
+      "name": "linxira-calamares",
+      "owns": [
+        "installer-upstream-fork"
+      ],
+      "upstream": "https://github.com/CachyOS/cachyos-calamares"
+    },
+    {
+      "detail": "https://github.com/Linxira-OS/linxira-rate-mirrors",
+      "lifecycle": "deprecated",
+      "name": "linxira-rate-mirrors",
+      "owns": [
+        "mirror-ranking"
+      ],
+      "upstream": "archlinux/rate-mirrors"
     }
   ],
   "schema": "org.linxira.wiki.manifest.v1",

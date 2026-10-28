@@ -47,12 +47,24 @@
 | [`extendai-lab-Studio`](https://github.com/Linxira-OS/extendai-lab-Studio) | extendai-studio | independent |
 | [`linxira-pulse`](https://github.com/Linxira-OS/linxira-pulse) | ai-assistant | independent |
 | [`linxira-skills`](https://github.com/Linxira-OS/linxira-skills) | skill-platform | independent |
+| [`linxira-fish-config`](https://github.com/Linxira-OS/linxira-fish-config) | fish-shell-configuration | paused |
+| [`linxira-zsh-config`](https://github.com/Linxira-OS/linxira-zsh-config) | zsh-shell-configuration | paused |
+| [`linxira-gnome-settings`](https://github.com/Linxira-OS/linxira-gnome-settings) | gnome-desktop-defaults | paused |
+| [`linxira-kde-settings`](https://github.com/Linxira-OS/linxira-kde-settings) | kde-plasma-defaults | paused |
+| [`linxira-hypr-noctalia`](https://github.com/Linxira-OS/linxira-hypr-noctalia) | hyprland-desktop-defaults | paused |
+| [`linxira-niri-noctalia`](https://github.com/Linxira-OS/linxira-niri-noctalia) | niri-desktop-defaults | paused |
+| [`linxira-mangowc-dms`](https://github.com/Linxira-OS/linxira-mangowc-dms) | mangowc-desktop-defaults | paused |
+| [`linxira-settings`](https://github.com/Linxira-OS/linxira-settings) | system-settings-defaults | paused |
+| [`linxira-wallpapers`](https://github.com/Linxira-OS/linxira-wallpapers) | wallpaper-assets | paused |
+| [`linxira-calamares`](https://github.com/Linxira-OS/linxira-calamares) | installer-upstream-fork | deprecated |
+| [`linxira-rate-mirrors`](https://github.com/Linxira-OS/linxira-rate-mirrors) | mirror-ranking | deprecated |
 
 ## 怎么读 lifecycle
 
 - **active** —— 在维护，功能承诺有效。
 - **review-required** —— 归属待复核。`linxira-hooks` 是当前唯一一个。
 - **independent** —— 自有节奏，不随系统发布走。
+- **paused** —— 归档暂停：仓库在 GitHub 上只读，仅为防误触；取消归档即可继续改，随时能重新激活。
 - **deprecated** —— 已被取代，不要在新工作里使用。
 
 ## 怎么读这张表

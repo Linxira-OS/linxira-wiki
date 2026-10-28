@@ -16,6 +16,7 @@ privilege: none
 - `active` — 在维护，功能承诺有效。
 - `review-required` — 归属待复核。`linxira-hooks` 是当前唯一一个。
 - `independent` — 自有节奏，不随系统发布走。
+- `paused` — 归档暂停。仓库在 GitHub 上是只读的，目的只是防止误触；需要改动时取消归档，改完可再归档，随时能重新激活。
 - `deprecated` — 已被取代，指向 `supersededBy`。不要在新工作里使用。
 
 ## 选工具的顺序
