@@ -402,24 +402,6 @@
       "owns": [
         "wallpaper-assets"
       ]
-    },
-    {
-      "detail": "https://github.com/Linxira-OS/linxira-calamares",
-      "lifecycle": "deprecated",
-      "name": "linxira-calamares",
-      "owns": [
-        "installer-upstream-fork"
-      ],
-      "upstream": "https://github.com/CachyOS/cachyos-calamares"
-    },
-    {
-      "detail": "https://github.com/Linxira-OS/linxira-rate-mirrors",
-      "lifecycle": "deprecated",
-      "name": "linxira-rate-mirrors",
-      "owns": [
-        "mirror-ranking"
-      ],
-      "upstream": "archlinux/rate-mirrors"
     }
   ],
   "schema": "org.linxira.wiki.manifest.v1",

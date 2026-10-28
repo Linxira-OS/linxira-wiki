@@ -56,8 +56,6 @@
 | [`linxira-mangowc-dms`](https://github.com/Linxira-OS/linxira-mangowc-dms) | mangowc-desktop-defaults | paused |
 | [`linxira-settings`](https://github.com/Linxira-OS/linxira-settings) | system-settings-defaults | paused |
 | [`linxira-wallpapers`](https://github.com/Linxira-OS/linxira-wallpapers) | wallpaper-assets | paused |
-| [`linxira-calamares`](https://github.com/Linxira-OS/linxira-calamares) | installer-upstream-fork | deprecated |
-| [`linxira-rate-mirrors`](https://github.com/Linxira-OS/linxira-rate-mirrors) | mirror-ranking | deprecated |
 
 ## 怎么读 lifecycle
 
