@@ -33,3 +33,9 @@ Linxira OS 是直接基于 Arch Linux 构建的 KDE Plasma 个人科学工作站
 Linxira OS 适合个人工作站和桌面计算节点。由于采用滚动更新，它不推荐用于大规模企业服务器部署。需要固定依赖、可重复构建或服务器式开发环境时，应使用版本固定的容器或其他隔离环境。
 
 Linxira OS 是独立项目，与 Arch Linux 无隶属关系，也未获得 Arch Linux 官方认可。
+
+---
+
+!!! warning "本站建设中"
+    这份 Wiki 尚未写完：项目总览与架构部分可用，运维手册、故障处置、权限模型等章节仍在补齐。
+    需要「怎么装、怎么跑起来」请看[文档站](https://linxira-os.github.io/zh/docs/)。
