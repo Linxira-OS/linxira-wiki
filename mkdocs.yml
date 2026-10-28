@@ -4,13 +4,29 @@ site_url: https://linxira-os.github.io/linxira-wiki/
 
 theme:
   name: material
+  language: zh
   palette:
-    primary: teal
-    accent: purple
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
   features:
     - navigation.sections
     - navigation.expand
     - content.code.copy
+
+repo_url: https://github.com/Linxira-OS/linxira-wiki
+repo_name: Linxira-OS/linxira-wiki
 
 nav:
   - 首页: index.md
@@ -30,6 +46,12 @@ nav:
     - 工作流模板: Linxira 特性/workflows.md
   - 外部链接:
     - Arch Wiki: 外部链接/arch-wiki.md
+  - 相关站点:
+      - 返回官网: https://linxira-os.github.io/zh/
+      - 快速上手（文档站）: https://linxira-os.github.io/zh/docs/
+      - 博客: https://linxira-os.github.io/zh/blog/
+      - 下载镜像: https://linxira-os.github.io/zh/download/
+      - GitHub: https://github.com/Linxira-OS
 
 not_in_nav: |
   /外部链接/debian.md
