@@ -15,12 +15,13 @@ privilege: polkit
 
 ```
 /etc/linxira/workspace-guard.conf     root:root 0600，agent 读不到（这是安全前提）
-<独立 ext4 分区>/                     备份介质，不写进 fstab，开机不挂载
+<独立 ext4 分区（安装器仅用第二块非系统盘）>/  备份介质，不写进 fstab，开机不挂载
   <store>/workspaces/<workspace_id>/registered.json
   <store>/workspaces/<workspace_id>/<snapshot_id>/guard-manifest.json
 ```
 
-配置不在 fstab 里，所以没有 root 就挂不上备份盘，agent 改不到快照。
+配置不在 fstab 里，所以普通用户没有 root 就挂不上备份盘，改不到快照；root 可以挂载和删除。
+只有一块盘时该分区不存在，守护保持关闭。
 
 ## 只读状态（免 root）
 

@@ -37,6 +37,8 @@ linxira-config ssh status                   # SSH 状态
 # 首次连接(跳过交互指纹、8 秒超时):
 #   ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=8 用户名@IP
 linxira-config timeshift status             # 快照后端状态
+sudo linxira-config timeshift enable        # 绑定系统盘并启用
+sudo linxira-config timeshift disable       # 停止自动快照
 linxira-config workspace-guard status       # 工作区守护状态
 linxira-config help                         # 完整命令表
 ```

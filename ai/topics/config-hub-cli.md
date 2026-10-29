@@ -13,7 +13,7 @@ privilege: user（ssh on / workspace-guard enable 等变更需 root/sudo）
 需要远程接入这台机器（SSH）、把诊断日志变成一个可分享链接、切换
 国内外镜像源、查安全态势，或想不起来 `linxira-config` 某个子命令
 的时候。一切以 `linxira-config help` 与 `--json` 输出为准（版本
-2.5.2 起）。
+2.6.4 起）。
 
 ## 命令面（agent 可直接调用）
 
