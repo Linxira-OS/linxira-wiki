@@ -50,7 +50,7 @@
 | | Agent 工作区 | 工作区守护注册的工作区 |
 |---|---|---|
 | 是什么 | agent 的 `--cwd`，会话与证据的落点 | 用户日常干活的目录 |
-| 典型路径 | `~/Linxira/debug` | `$home/Linxira-OS`、`$home/Projects`、`$home/work`、`$home/src` |
+| 典型路径 | `~/Linxira/debug` | `$HOME/Linxira-OS`、`$HOME/Projects`、`$HOME/work`、`$HOME/src` |
 | 谁在用 | agent | 用户自己 |
 | 做什么 | 存证据、跑会话 | 默认由同盘守护定时做快照，供误删后恢复 |
 

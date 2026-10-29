@@ -21,6 +21,11 @@
 - `scripts/generate-manifest.py` —— 生成 `ai/manifest.json`。
 - `tests/` —— pytest 用例;`mkdocs.yml` / `requirements.txt` / `VERSION`。
 
+## 文档风格
+- 术语以 `README.md` 的「术语约定」为准:写 **home 目录**、**目录**、**终端**、**shell**、
+  **快照**、**工作区**、**技能**、**清单**;不写“家目录”“复制品”等非标准说法。
+- 同一概念全文只用一个词;首次出现可在括号内给英文原词,后文不再重复解释。
+
 ## 构建与校验
 ```bash
 pip install -r requirements.txt      # mkdocs + mkdocs-material

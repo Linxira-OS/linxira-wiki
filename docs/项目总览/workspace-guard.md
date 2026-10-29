@@ -30,7 +30,7 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 | | 守护注册的工作区 | Agent 工作区 |
 |---|---|---|
 | 是什么 | 用户日常干活的目录，作为快照目标 | agent 的 `--cwd`，会话与证据的落点 |
-| 典型路径 | `$home/Linxira-OS`、`$home/Projects`、`$home/work`、`$home/src` | `~/Linxira/debug` |
+| 典型路径 | `$HOME/Linxira-OS`、`$HOME/Projects`、`$HOME/work`、`$HOME/src` | `~/Linxira/debug` |
 | 谁在用 | 用户自己 | agent |
 
 `workspace-guard` 登记的是**快照目标**，不是 agent 工作区；agent 工作区也不会

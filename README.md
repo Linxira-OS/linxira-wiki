@@ -12,6 +12,13 @@ Linux, KDE, systemd, pacman, and hardware topics are delegated to the
 structures, and implementation decisions live in each project's own repository,
 not here.
 
+## 术语约定
+
+- **home 目录（用户主目录）**：路径写作 `$HOME` 或 `~`；不要写“家目录”。
+- **目录 vs 文件夹**：路径、命令行、代码仓库语境用“目录”；桌面 GUI 可用“文件夹”。
+- **终端**：终端模拟器；**shell** 保留英文，不译作“壳”。
+- **快照、工作区、技能、清单**：固定译名，不混用“备份/副本/技能包/索引”等说法。
+
 ## Contents
 
 - **首页**: what Linxira OS is (a KDE Plasma / COSMIC personal scientific
