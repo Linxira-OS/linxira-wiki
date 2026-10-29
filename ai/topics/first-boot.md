@@ -42,9 +42,9 @@ linxira-components list --catalog /usr/share/linxira/catalog/catalog-v3.json --j
 安装时被延后的组件已由回执预选：组件管理器 GUI 打开即预勾选
 （机制见 `installer-selection` 主题）。
 
-## 4. 注册工作区守护（可选但建议）
+## 4. 确认工作区守护（默认启用）
 
-用户有代码仓库时，装机阶段应已创建独立 ext4 分区。
+装机阶段已写入同盘守护配置并启动定时器。
 确认它跑起来了：
 
 ```bash

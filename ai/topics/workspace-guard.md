@@ -9,19 +9,19 @@ privilege: polkit
 # 工作区守护
 
 防的是一件事：**agent 用完整用户权限把工作区干掉**，包括 `rm -rf .git`。
-恢复点由 root 定时器每 30 分钟独立生成，不依赖 agent 自觉，也不放在用户能改的地方。
+恢复点由 root 定时器每 30 分钟独立生成，写在系统盘的 root-only 目录里。
 
 ## 布局
 
 ```
 /etc/linxira/workspace-guard.conf     root:root 0600，agent 读不到（这是安全前提）
-<独立 ext4 分区（安装器仅用第二块非系统盘）>/  备份介质，不写进 fstab，开机不挂载
+/var/lib/linxira/guard/               同盘 root-only 仓库，不建分区
   <store>/workspaces/<workspace_id>/registered.json
   <store>/workspaces/<workspace_id>/<snapshot_id>/guard-manifest.json
 ```
 
-配置不在 fstab 里，所以普通用户没有 root 就挂不上备份盘，改不到快照；root 可以挂载和删除。
-只有一块盘时该分区不存在，守护保持关闭。
+仓库目录是 `root:root 0700`；普通用户读不到也改不了；root 可以读写和删除。
+不创建独立分区，不改分区表，不碰第二块盘。
 
 ## 只读状态（免 root）
 
@@ -37,12 +37,12 @@ linxira-components guard list --json
 ## 用户设置（root 交互，交给用户跑）
 
 ```bash
-sudo linxira-config workspace-guard enable    # 选盘 → 选容量 → 分区 → 写配置 → 注册 → 开定时器
+sudo linxira-config workspace-guard enable    # 建同盘仓库 → 写配置 → 注册 → 开定时器
 sudo linxira-config workspace-guard disable   # 只停定时器，保留仓库数据
 ```
 
-`enable` 幂等：重跑从检测步骤续跑，不会重复分区。中断后直接再跑一次即可。
-已创建的分区**不会**被自动删除——删分区表是破坏性操作，只能由用户显式执行。
+`enable` 幂等：已有配置时复用现有仓库，不重复建目录。
+装机阶段默认执行同一套同盘配置；`enable` 用于补建或重新启用。
 
 ## agent 能做什么（Polkit 授权）
 

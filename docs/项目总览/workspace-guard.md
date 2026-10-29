@@ -7,7 +7,7 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 一旦工作区没了，用户的代码、提交历史、未推送的分支一起没了，而且往往没有第二份。
 
 这个机制不试图让 agent 更小心。它假设 agent 会犯错，然后在**用户权限之外**
-留一层独立恢复点：root 定时器每 30 分钟做一次快照，写在一块普通用户访问不到的独立 ext4 分区上。
+留一层独立恢复点：root 定时器每 30 分钟做一次快照，写在系统盘的 root-only 目录 `/var/lib/linxira/guard` 里。
 
 ## 职责边界
 
@@ -16,8 +16,8 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 | 部分 | 归属 | 内容 |
 |---|---|---|
 | 快照与恢复的执行 | [`linxira-components`](linxira-components.md) | `guard_store` / `guard_worker` / `guard_cli` / 定时器 |
-| 分区、容量选择、启用 | [`linxira-config`](linxira-config.md) | `linxira-config workspace-guard enable` |
-| 装机时创建分区 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | `shellprocess@linxira-workspace-guard` 装机脚本 |
+| 仓库目录、注册、启用 | [`linxira-config`](linxira-config.md) | `linxira-config workspace-guard enable` |
+| 装机时写入同盘配置 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | `shellprocess@linxira-workspace-guard` 装机脚本 |
 | 文档 | 本 wiki | 本页与 `ai/topics/workspace-guard.md` |
 
 **不归它**：不备份系统本身（那是 timeshift 的事），不备份用户主目录整体，
@@ -39,22 +39,19 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 
 ## 怎么用
 
-### 启用（root，用户交互）
+### 启用（root）
 
 ```bash
 sudo linxira-config workspace-guard enable
 ```
 
-四步引导：选目标盘 → 选容量（32 / 64 / 128 GB 或自定义，最小 32 GB）→
-创建 ext4 分区并写配置 → 注册工作区并开启定时器。整条命令是幂等的，
-中途 Ctrl-C 后重跑会从检测步骤续跑，不会重复分区。
-装机阶段只在第二块非系统盘上创建 64 GiB 分区；只有一块盘时守护保持关闭。
+在系统盘创建 root-only 的 `/var/lib/linxira/guard`，写配置、注册工作区、
+开启定时器。不创建分区，不改分区表，不碰第二块盘。命令幂等。
+装机阶段默认执行同一套同盘配置；`enable` 用于补建或重新启用。
 
 ```bash
 sudo linxira-config workspace-guard disable   # 只停定时器，保留仓库数据
 ```
-
-已创建的分区**不会**被自动删除。删除分区表是破坏性操作，只能由用户显式执行。
 
 ### 日常（agent 可用，免授权部分）
 
@@ -89,10 +86,9 @@ sudo linxira-components guard unregister ~/Linxira-OS
 
 ## 恢复点的生命周期
 
-守护分区不写进 `/etc/fstab`，所以开机时不挂载。每次开机后由 root 侧重新挂载：
-定时器与 `snapshot` / `restore` 动手前按配置里的 `store_uuid` 找到设备并挂到 store 路径，
-挂不上就如实报错并跳过，不静默把快照写到系统盘上。
-定时器以 root 身份每 30 分钟跑一次，不依赖 agent 自觉，也不依赖用户在场。
+守护仓库在系统盘上，不创建独立分区，不写 `/etc/fstab`。目录是 `root:root 0700`；
+普通用户 agent 读不到，root 可读写。定时器以 root 身份每 30 分钟跑一次，
+不依赖 agent 自觉，也不依赖用户在场。
 
 ## 三条不变量
 
@@ -100,8 +96,8 @@ sudo linxira-components guard unregister ~/Linxira-OS
    这是安全前提，不是可配置项——不提供把它放到用户可读位置的选项。
 2. **恢复不覆盖。** `restore` 永远写入新目录，落在原工作区内、落在守护仓库内、
    已存在且非空的目标全部拒绝。原工作区一个字节都不会动。
-3. **备份盘开机不挂载。** 守护分区不写进 `/etc/fstab`。普通用户没有 root 就挂不上，
-   无法修改或删除已有的快照；root 可以挂载和删除。
+3. **仓库目录 root-only。** `/var/lib/linxira/guard` 是 `root:root 0700`。
+   普通用户读不到也改不了；root 可以读写和删除。
 
 ## 深入设计
 
