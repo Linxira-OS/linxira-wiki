@@ -3,14 +3,28 @@
 本 wiki 讨论**每个项目的大体设计流程**：为什么存在、职责边界、何时用哪个、权限模型。
 具体项目的内部设计、数据结构与实现决策不在本 wiki，在各项目自己仓库的 `document/` 目录。
 
-本页是全表。日常只需要记住六个项目，它们是 agent 与人会直接操作的那六个：
+本页是全表。日常只需要记住几个直接面向用户的入口：
 
 - [Config CLI](linxira-config.md) —— 改设置、查网络与 SSH、镜像源、守护的启用入口
 - [Components](linxira-components.md) —— 装软件与一切需要 root 的事务
+- [Welcome](linxira-welcome.md) —— 首次启动与状态入口
 - [更新助手](linxira-update.md) —— 检查与应用系统更新、托盘提醒、快照一体化的更新侧
 - [恢复诊断](linxira-recovery.md) —— 系统出问题时先取只读证据
 - [崩溃监视](linxira-crash-watch.md) —— 捕获崩溃现场、写文本证据，用户选动作后才唤起 agent
 - [工作区守护](workspace-guard.md) —— 跨项目机制，防 agent 误删工作区
+
+## 用户软件索引
+
+| 分组 | 页面 |
+|---|---|
+| 系统入口 | [Config CLI](linxira-config.md)、[Components](linxira-components.md)、[Welcome](linxira-welcome.md)、[更新助手](linxira-update.md)、[恢复诊断](linxira-recovery.md)、[崩溃监视](linxira-crash-watch.md)、[工作区守护](workspace-guard.md) |
+| 软件管理 | [Package Center](linxira-package-center.md)、[Component Manager](linxira-component-manager.md)、[Completion Agent](linxira-completion-agent.md)、[Gaming Manager](linxira-gaming-manager.md) |
+| 硬件与内核 | [HWD Detector](linxira-hwd-detector.md)、[Hardware Driver Manager](linxira-hardware-driver-manager.md)、[Kernel Manager](linxira-kernel-manager.md) |
+| 数据与签名 | [Catalog](linxira-catalog.md)、[Keyring](linxira-keyring.md) |
+| 平台与 Agent | [WSL 发行版](linxira-wsl.md)、[Agent 工作区](agent-workspace.md)、[Agent 技能](agent-skills.md) |
+| 占位 | [Zeta](linxira-zeta.md)、[Bio SDK](linxira-bio-sdk.md)（建设中，不完整；只保留入口） |
+
+构建/发布仓库（`packages`、`linxira-packages`、`linxira-iso-direct`）与品牌资产不是终端用户软件，不单列使用页；品牌资产见 [品牌系统](../Linxira%20特性/branding.md)。Zeta 与 Bio SDK 目前只保留占位页，不写未落地的用法。
 
 ## 全表
 

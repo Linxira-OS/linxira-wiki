@@ -34,21 +34,78 @@ nav:
   - 首页: index.md
   - 项目总览:
       - 索引: 项目总览/index.md
-      - Config CLI: 项目总览/linxira-config.md
-      - Components: 项目总览/linxira-components.md
-      - 更新助手: 项目总览/linxira-update.md
-      - 恢复诊断: 项目总览/linxira-recovery.md
-      - 崩溃监视: 项目总览/linxira-crash-watch.md
-      - 工作区守护: 项目总览/workspace-guard.md
-      - Agent 工作区: 项目总览/agent-workspace.md
-      - Agent 技能: 项目总览/agent-skills.md
-      - WSL 发行版: 项目总览/linxira-wsl.md
+      - 系统入口:
+          - Config CLI: 项目总览/linxira-config.md
+          - Components: 项目总览/linxira-components.md
+          - 欢迎中心: 项目总览/linxira-welcome.md
+          - 更新助手: 项目总览/linxira-update.md
+          - 恢复诊断: 项目总览/linxira-recovery.md
+          - 崩溃监视: 项目总览/linxira-crash-watch.md
+          - 工作区守护: 项目总览/workspace-guard.md
+      - 软件管理:
+          - Package Center: 项目总览/linxira-package-center.md
+          - Component Manager: 项目总览/linxira-component-manager.md
+          - Completion Agent: 项目总览/linxira-completion-agent.md
+          - Gaming Manager: 项目总览/linxira-gaming-manager.md
+      - 硬件与内核:
+          - HWD Detector: 项目总览/linxira-hwd-detector.md
+          - Hardware Driver Manager: 项目总览/linxira-hardware-driver-manager.md
+          - Kernel Manager: 项目总览/linxira-kernel-manager.md
+      - 数据与签名:
+          - Catalog: 项目总览/linxira-catalog.md
+          - Keyring: 项目总览/linxira-keyring.md
+      - 平台与 Agent:
+          - WSL 发行版: 项目总览/linxira-wsl.md
+          - Agent 工作区: 项目总览/agent-workspace.md
+          - Agent 技能: 项目总览/agent-skills.md
+      - 占位:
+          - Zeta: 项目总览/linxira-zeta.md
+          - Bio SDK: 项目总览/linxira-bio-sdk.md
   - Linxira 特性:
     - Direct Arch 架构: Linxira 特性/architecture.md
     - 品牌系统: Linxira 特性/branding.md
     - 配置中心: Linxira 特性/config-hub.md
     - 预装工具: Linxira 特性/preinstalled-tools.md
     - 工作流模板: Linxira 特性/workflows.md
+  - English:
+      - Home: en/index.md
+      - Software:
+          - Index: en/software/index.md
+          - System entry:
+              - Welcome: en/software/welcome.md
+              - Completion Agent: en/software/completion-agent.md
+              - Gaming Manager: en/software/gaming-manager.md
+          - Software management:
+              - Components: en/software/components.md
+              - Package Center: en/software/package-center.md
+              - Component Manager: en/software/component-manager.md
+              - Update: en/software/update.md
+          - Hardware and kernel:
+              - HWD Detector: en/software/hwd-detector.md
+              - Hardware Driver Manager: en/software/hardware-driver-manager.md
+              - Kernel Manager: en/software/kernel-manager.md
+          - Data and signing:
+              - Catalog: en/software/catalog.md
+              - Keyring: en/software/keyring.md
+          - Platform and diagnostics:
+              - Config: en/software/config.md
+              - Recovery: en/software/recovery.md
+              - Crash Watch: en/software/crash-watch.md
+              - Workspace Guard: en/software/workspace-guard.md
+              - Agent Workspace: en/software/agent-workspace.md
+              - Agent Skills: en/software/agent-skills.md
+              - WSL: en/software/wsl.md
+          - Placeholders:
+              - Zeta: en/software/zeta.md
+              - Bio SDK: en/software/bio-sdk.md
+      - Features:
+          - Direct Arch Architecture: en/features/architecture.md
+          - Branding: en/features/branding.md
+          - Config Hub: en/features/config-hub.md
+          - Preinstalled Tools: en/features/preinstalled-tools.md
+          - Workflows: en/features/workflows.md
+      - External:
+          - Arch Wiki: en/external/arch-wiki.md
   - 外部链接:
     - Arch Wiki: 外部链接/arch-wiki.md
   - 相关站点:

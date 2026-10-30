@@ -31,7 +31,7 @@ linxira-recovery-diagnostics                   # 不带参数 = 打开 GUI
 linxira-recovery-diagnostics --plan org.linxira.recovery.pacman-lock-diagnose.v1
 ```
 
-GUI 有五个页签：Overview、Storage、Network、Support report、Workspace guard。
+GUI 有五个页签：Overview、Snapshots、Repairs、Workspace guard、Support report。
 Repairs 页把每个 plan 的 `effects` 与 `preconditions` 摆出来；
 `available: false` 的 plan 按钮是禁用的，并在 tooltip 里说明原因——**那是设计，不是 bug**。
 
@@ -45,7 +45,7 @@ Repairs 页把每个 plan 的 `effects` 与 `preconditions` 摆出来；
 
 唯一与 root 有关的例外是工作区守护的证据采集：它读的是
 root 拥有的 `/etc/linxira/workspace-guard.conf`，所以只能报告
-「已配置但当前用户无权读取」或直接报 `configured: false`，不会因此崩溃或索取授权。
+`configured: false`（读取被拒绝与未配置在当前实现中不可区分），不会因此崩溃或索取授权。
 
 ## 深入设计
 

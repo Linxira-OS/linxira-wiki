@@ -28,8 +28,12 @@ SSH 服务与密钥、UFW 防火墙、日志采集与上传、Timeshift 快捷�
 linxira-config mirror arch speed            # 测延迟
 linxira-config mirror arch auto             # 选最快的
 linxira-config net diag                     # 网络诊断
-linxira-config ssh on                       # 持久开启 SSH(写入密码登录并启动 sshd)
-linxira-config ssh off                      # 持久关闭
+sudo linxira-config ssh on                  # 首次开启 SSH(允许密码, 用于配密钥)
+linxira-config ssh key generate             # 生成 Ed25519 密钥
+linxira-config ssh key show                 # 查看公钥并授权到服务器
+sudo linxira-config ssh harden              # 确认密钥可用后关闭密码登录
+sudo linxira-config ssh password on --yes   # 显式重新允许密码登录
+sudo linxira-config ssh off                 # 持久关闭
 linxira-config ssh status                   # SSH 状态
 # 临时开启(仅本次, 重启后关闭, 适合一次性排障):
 #   sudo systemctl start sshd
@@ -42,6 +46,8 @@ sudo linxira-config timeshift disable       # 停止自动快照
 linxira-config workspace-guard status       # 工作区守护状态
 linxira-config help                         # 完整命令表
 ```
+
+`ssh harden` 会检查当前用户至少有一把可用的 `authorized_keys`，把 `10-linxira.conf` 改成 `PasswordAuthentication no` 与 `KbdInteractiveAuthentication no`，先运行 `sshd -t`，再 reload。没有可用密钥会拒绝；非交互脚本加 `--yes`。不要用 `99-linxira-hardening.conf`：OpenSSH 先读 drop-in 且同一项取第一个值，`10-linxira.conf` 的 `yes` 会让后面的 `no` 静默失效。
 
 以下四条支持 `--json`，输出单行 JSON，结构化数据可直接给 agent 解析：
 

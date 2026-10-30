@@ -2,6 +2,8 @@
 
 Linxira OS 是直接基于 Arch Linux 构建的 KDE Plasma 个人科学工作站发行版，面向桌面超算、科学计算、AI、工程、生物信息和容器开发。
 
+[English edition](en/index.md) · [软件索引](项目总览/index.md)
+
 ## 本站与另外两个站的分工
 
 三个站点的定位不同，别混着看：

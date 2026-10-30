@@ -24,6 +24,14 @@
 
 ## 怎么用
 
+首次进入安装后的系统，先执行一次：
+
+```bash
+linxira-update
+```
+
+之后日常可以只检查或让托盘提醒：
+
 ```bash
 linxira-update --check      # 只检查并通知（定时器每小时自动跑一次）
 linxira-update              # 交互式全量升级

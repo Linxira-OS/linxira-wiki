@@ -43,8 +43,8 @@ linxira-components apply --confirmation ./out/confirmation.json
 
 ```bash
 linxira-components guard status                                  # 只读，免授权
-linxira-components guard register ~/Linxira-OS                  # 弹 Polkit
-linxira-components guard snapshot ~/Linxira-OS
+linxira-components guard register ~/Linxira-OS                  # 需要 root
+linxira-components guard snapshot ~/Linxira-OS                  # Polkit 授权
 linxira-components guard restore <id> --target ~/ws-restored
 ```
 
@@ -53,8 +53,8 @@ linxira-components guard restore <id> --target ~/ws-restored
 ## 何时需要 root
 
 - **不需要**：`list`、`inventory`、`plan`、`confirm`。计划与确认都是纯计算。
-- **需要**：`apply` 与 `guard` 的 `init` / `register` / `unregister` / `snapshot` / `restore`。
-  这些走 D-Bus，由 Polkit 弹窗向用户授权，**不需要 agent 自己持有 sudo**。
+- **需要**：`apply` 与 `guard` 的 `init` / `register` / `unregister` 需要 root；
+  `snapshot` / `restore` 走 D-Bus，由 Polkit 弹窗向用户授权。**不需要 agent 自己持有 sudo**。
 
 计划文件与执行之间会做漂移检查：系统状态在两步之间变了，这份计划就作废。
 这是刻意的——计划给用户看的是当时的系统，不是现在的系统。

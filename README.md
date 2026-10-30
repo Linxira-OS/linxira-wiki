@@ -3,6 +3,11 @@
 The official Linxira OS wiki, built with MkDocs (Material theme) and published
 at **https://linxira-os.github.io/linxira-wiki/**.
 
+The wiki is bilingual: the Chinese pages live under `docs/项目总览/` and
+`docs/Linxira 特性/`; the English edition lives under `docs/en/`. First-party
+software usage is documented in both languages; Zeta and Linxira Bio SDK are
+deliberate placeholders only.
+
 The wiki records only what is unique to Linxira OS — the installer, Welcome,
 Shelly, Config Hub, the software catalog, workflows, and branding — and
 discusses each project's design rationale: why it exists, its responsibility

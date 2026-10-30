@@ -36,7 +36,7 @@ ISO 装机同款配置（验签），`linxira-update` 开箱可用。
 
 ## 内容物
 
-完整清单见仓库内 `wsl-packages.x86_64`（约 318 个包，装好 1.6G，压缩约
+完整清单见仓库内 `wsl-packages.x86_64`（约 318 个包，装好约 1.7G，压缩约
 0.5G）：`base` + Linxira 一方 CLI 工具链（components / component-manager /
 config-hub / recovery-diagnostics / update / wiki / catalog / completion-agent）。
 `linxira-update` 会拉入 Qt 图形栈，在 Win11 + WSLg 下可直接显示。
