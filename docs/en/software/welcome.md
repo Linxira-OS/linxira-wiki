@@ -74,19 +74,19 @@ persisted; unsupported locales fall back to English.
 ## When root is needed
 
 **Never.** Welcome has no elevation path: launchers use fixed executables and fixed
-argument vectors, Config CLI is opened inside Konsole, and the Terminal page leaves
-`chsh` for you to run. Anything requiring root goes through the owning tool and its
-own authorization model.
+argument vectors, Config CLI is opened in the session's terminal (Konsole on KDE,
+`cosmic-term` on COSMIC), and the Terminal page leaves `chsh` for you to run.
+Anything requiring root goes through the owning tool and its own authorization model.
 
 ## Known limitations
 
 - It is an entry and status surface, not a live monitor of the other tools.
 - The System page depends on `/usr/share/linxira/agent/capabilities.json` from
   `linxira-config-hub`; when it is missing the page is empty.
-- Terminal dispatch is capability based: `konsole`, `alacritty` and `xterm` accept a
-  command directly; `cosmic-term`, `kitty` and `foot` are started through a throwaway
-  `Terminal=true` desktop entry via `gtk-launch`, so those entries fail without
-  `gtk-launch`.
+- Terminal dispatch is session-aware: COSMIC uses `cosmic-term -e`, KDE uses
+  `konsole --hold -e`, and `alacritty`/`xterm` are fallbacks. The command is passed
+  to the terminal directly, avoiding the `Terminal=true`/`gtk-launch` relay that
+  COSMIC does not provide reliably.
 - The Live ISO uses an ephemeral profile, so Welcome opens on every fresh Live boot and
   the login preference does not persist across boots.
 - Ten UI languages are shipped; everything else falls back to English.
