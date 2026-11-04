@@ -32,6 +32,40 @@ repo_name: Linxira-OS/linxira-wiki
 
 plugins:
   - search
+  - redirects:
+      redirect_maps:
+        "项目总览/agent-skills.md": "software/agent-skills.md"
+        "项目总览/agent-workspace.md": "software/agent-workspace.md"
+        "项目总览/linxira-bio-sdk.md": "software/bio-sdk.md"
+        "项目总览/linxira-catalog.md": "software/catalog.md"
+        "项目总览/linxira-completion-agent.md": "software/completion-agent.md"
+        "项目总览/linxira-component-manager.md": "software/component-manager.md"
+        "项目总览/linxira-components.md": "software/components.md"
+        "项目总览/linxira-config.md": "software/config.md"
+        "项目总览/linxira-crash-watch.md": "software/crash-watch.md"
+        "项目总览/linxira-gaming-manager.md": "software/gaming-manager.md"
+        "项目总览/linxira-hardware-driver-manager.md": "software/hardware-driver-manager.md"
+        "项目总览/linxira-hwd-detector.md": "software/hwd-detector.md"
+        "项目总览/index.md": "software/index.md"
+        "项目总览/linxira-kernel-manager.md": "software/kernel-manager.md"
+        "项目总览/linxira-keyring.md": "software/keyring.md"
+        "项目总览/linxira-package-center.md": "software/package-center.md"
+        "项目总览/linxira-recovery.md": "software/recovery.md"
+        "项目总览/linxira-update.md": "software/update.md"
+        "项目总览/linxira-welcome.md": "software/welcome.md"
+        "项目总览/workspace-guard.md": "software/workspace-guard.md"
+        "项目总览/linxira-wsl.md": "software/wsl.md"
+        "项目总览/linxira-zeta.md": "software/zeta.md"
+        "Linxira 特性/architecture.md": "features/architecture.md"
+        "Linxira 特性/branding.md": "features/branding.md"
+        "Linxira 特性/config-hub.md": "features/config-hub.md"
+        "Linxira 特性/preinstalled-tools.md": "features/preinstalled-tools.md"
+        "Linxira 特性/workflows.md": "features/workflows.md"
+        "外部链接/arch-wiki.md": "external/arch-wiki.md"
+        "外部链接/debian.md": "external/debian.md"
+        "外部链接/mint.md": "external/mint.md"
+        "法律与安全/license.md": "legal/license.md"
+        "法律与安全/security.md": "legal/security.md"
   - i18n:
       docs_structure: folder
       fallback_to_default: true
