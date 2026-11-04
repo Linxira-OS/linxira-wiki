@@ -90,7 +90,7 @@ def test_show_reads_topic_and_docs_page():
     assert topic.stdout.startswith("---")
     assert "name: workspace-guard" in topic.stdout
 
-    page = run_cli("show", "linxira-config", root=REPOSITORY_ROOT)
+    page = run_cli("show", "config", root=REPOSITORY_ROOT)
     assert page.returncode == 0
     assert "## 为什么存在" in page.stdout
 
