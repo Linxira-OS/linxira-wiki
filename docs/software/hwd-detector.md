@@ -4,7 +4,7 @@
 
 驱动建议必须站在可复核的硬件事实上。显卡是核显、独显，还是直通给虚拟机的设备；
 CPU 与虚拟机厂商是什么——这些都不是界面能猜出来的。`linxira-hwd-detector` 把事实
-收成一份固定契约的只读 JSON；[硬件与驱动管理器](linxira-hardware-driver-manager.md)
+收成一份固定契约的只读 JSON；[硬件与驱动管理器](hardware-driver-manager.md)
 只负责把事实映射成策略，探测与策略不混在一起。
 
 ## 职责边界
@@ -32,9 +32,9 @@ CPU 与虚拟机厂商是什么——这些都不是界面能猜出来的。`lin
 | 步骤 | 执行者 | 是否改动系统 |
 |---|---|---|
 | 采集硬件事实（无参 JSON） | `linxira-hwd-detector` | 只读，零副作用 |
-| 事实 → 策略 → 计划 | [硬件与驱动管理器](linxira-hardware-driver-manager.md) | 只读；计划只写用户状态目录 |
-| 驱动安装 / 服务变更 | [Components](linxira-components.md) 的系统事务服务 + Polkit | 提权，需确认与快照 |
-| 内核与引导状态报告 | [内核管理器](linxira-kernel-manager.md) | 只读；计划只写用户状态目录 |
+| 事实 → 策略 → 计划 | [硬件与驱动管理器](hardware-driver-manager.md) | 只读；计划只写用户状态目录 |
+| 驱动安装 / 服务变更 | [Components](components.md) 的系统事务服务 + Polkit | 提权，需确认与快照 |
+| 内核与引导状态报告 | [内核管理器](kernel-manager.md) | 只读；计划只写用户状态目录 |
 
 检测层止步于「事实 + 类别 ID」。任何包名、许可判断与执行顺序都在下游，探测器不参与。
 
@@ -81,7 +81,7 @@ lhwd --remove <profile>    # 卸载档案
   源码在进入包事务前检查有效 UID；不是 root 就报错退出。
 
 Linxira 的正常授权路径不在 `lhwd` 里：改机器的动作走
-[Components](linxira-components.md) 的计划、确认与 Polkit。`lhwd` 是保留的完整
+[Components](components.md) 的计划、确认与 Polkit。`lhwd` 是保留的完整
 CHWD 工具面，不应作为日常驱动的提权入口。
 
 ## 已知限制

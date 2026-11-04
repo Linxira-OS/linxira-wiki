@@ -18,7 +18,7 @@
 
 **不归它**：
 
-- **不执行修复**。lrd 只产出计划；两个只读诊断由 [`linxira-components`](linxira-components.md)
+- **不执行修复**。lrd 只产出计划；两个只读诊断由 [`linxira-components`](components.md)
   的系统事务服务执行，修复类计划没有执行后端。
 - **不做 root 操作**。采集阶段没有任何写操作，也没有 `subprocess` 走 shell。
 - **不删东西**。pacman 锁被锁住时它只报告，不删除。

@@ -85,8 +85,8 @@ Logo、壁纸、图标等品牌资产属于 Linxira 保留权利的资产，**�
 - [安全与贡献](security.md)
 - [维护、信任与软件安全](https://linxira-os.github.io/zh/docs/maintenance-security/)
 - [贡献指南](https://linxira-os.github.io/zh/docs/contributing/)
-- [更新助手（linxira-update）](../项目总览/linxira-update.md)：更新前快照的行为边界
-- [软件索引](../项目总览/index.md)
+- [更新助手（linxira-update）](../software/update.md)：更新前快照的行为边界
+- [软件索引](../software/index.md)
 
 ---
 

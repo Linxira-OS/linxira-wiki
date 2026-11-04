@@ -18,12 +18,12 @@
 
 - **不做安装决策**。哪些条目能装、走哪个来源、是否需要接受许可，来自 catalog 与回执。
 - **不发包事务**。安装不由它执行，而是交给
-  [`linxira-components`](linxira-components.md)。
+  [`linxira-components`](components.md)。
 - **不处理安装器该做的事**。经过审核的官方 Arch 应用与组件必须在首次启动前就装进
   Calamares 目标环境；回执如果错误地把这类条目交给 Completion，程序会直接拒绝。
 
 **委托出去的事务**：需要执行时，它把回执里的条目写成选择文档交给
-[`linxira-components`](linxira-components.md) 的 `plan → confirm → apply` 链，
+[`linxira-components`](components.md) 的 `plan → confirm → apply` 链，
 `apply` 通过 `pkexec` 提权；回执由后端写在 `/var/lib/linxira/components/receipts`。
 
 **代理自身不提权**：它以普通用户运行，只读 catalog 与安装回执，只写自己的状态文件，
@@ -76,4 +76,4 @@ Polkit 授权。它自己不提权，也不接收 root 命令。
 
 回执与 catalog 的绑定规则、条目分类与状态文件格式见
 [`linxira-completion-agent`](https://github.com/Linxira-OS/linxira-completion-agent)
-仓库；事务形状见 [Components](linxira-components.md)。
+仓库；事务形状见 [Components](components.md)。

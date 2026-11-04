@@ -16,11 +16,11 @@
 
 **不归它**：
 
-- **计划、确认与特权执行不归它**。这三步由 [`linxira-components`](linxira-components.md)
+- **计划、确认与特权执行不归它**。这三步由 [`linxira-components`](components.md)
   拥有，界面只调用它。
 - **元数据与策略不归它**。哪些应用可选、属于哪个类别、是否推荐，由
   [`linxira-catalog`](https://github.com/Linxira-OS/linxira-catalog) 决定。
-- **配置与诊断不归它**。镜像、SSH、防火墙等在 [Config CLI](linxira-config.md)。
+- **配置与诊断不归它**。镜像、SSH、防火墙等在 [Config CLI](config.md)。
 - **移除不归它**。Phase 1 只安装；共享后端还没有归属台账、依赖归因与漂移检测之前，
   没有包移除入口。
 
@@ -92,5 +92,5 @@ linxira-package-center
 ## 深入设计
 
 产品边界见仓库的 `docs/BOUNDARIES.md`；事务形状见
-[Components](linxira-components.md)，内部实现见
+[Components](components.md)，内部实现见
 [`linxira-package-center`](https://github.com/Linxira-OS/linxira-package-center)。

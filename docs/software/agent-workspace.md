@@ -24,7 +24,7 @@
 **不归它**：
 
 - 不实现工作区：目前唯一的实现方是
-  [崩溃监视](linxira-crash-watch.md)，它创建目录、写 `INDEX.md`、物化
+  [崩溃监视](crash-watch.md)，它创建目录、写 `INDEX.md`、物化
   `diagnose-crash` 技能。
 - 不定义 agent 的会话格式或恢复逻辑；`--cwd`、`--session-dir` 与 `.zeta/` 的语义属于 Zeta。
 - 不做快照或恢复；那是 [工作区守护](workspace-guard.md)。
@@ -122,7 +122,7 @@ agent 工作区也没有被守护注册。两者的路径、生命周期与用�
 
 ## 相关
 
-- [崩溃监视](linxira-crash-watch.md) —— 目前唯一实现了 agent 工作区的子系统
+- [崩溃监视](crash-watch.md) —— 目前唯一实现了 agent 工作区的子系统
 - [Agent 技能](agent-skills.md) —— 技能的作用域、系统技能位置与 `linxira-skills` CLI
 - [工作区守护](workspace-guard.md) —— 用户目录的快照与恢复
 

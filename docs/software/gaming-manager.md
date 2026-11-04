@@ -20,7 +20,7 @@
 **不归它**：
 
 - **装包不归它**。部署环境时它只请求 catalog 里的 `bundle-gaming-setup`，
-  计划、确认与特权执行由 [`linxira-components`](linxira-components.md) 完成。
+  计划、确认与特权执行由 [`linxira-components`](components.md) 完成。
 - **不管理 Steam 本身**。Steam 的登录、安装与更新仍由 Steam 客户端负责。
 - **不保存备份密码**。它只把密码文件路径交给 restic，密码内容从不写入自己的状态。
 - **不改系统级配置**。驱动、内核与系统服务在各自的工具里。
@@ -29,7 +29,7 @@
 `bundle-gaming-setup`（`plan --bundle bundle-gaming-setup --accept-license steam`），
 展示不可变计划，确认后调用 `confirm`，再由 `pkexec linxira-components apply
 --confirmation ...` 提权执行；计划、确认、特权执行与回执都归
-[`linxira-components`](linxira-components.md)。
+[`linxira-components`](components.md)。
 
 **程序自身不提权**：它拒绝以 root 运行，不调用 `sudo`、不执行 pacman、不写后端回执。
 扫描、导入、启动与备份都以当前用户身份完成。
@@ -110,4 +110,4 @@ restic 自己打开校验，`restic` 未安装时程序直接报错。
 
 状态库与活动记录是本地 SQLite；兼容启动规则、prefix 边界与备份命令都写在
 [`linxira-gaming-manager`](https://github.com/Linxira-OS/linxira-gaming-manager)
-仓库里。事务形状见 [Components](linxira-components.md)。
+仓库里。事务形状见 [Components](components.md)。

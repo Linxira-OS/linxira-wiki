@@ -3,8 +3,10 @@
 The official Linxira OS wiki, built with MkDocs (Material theme) and published
 at **https://linxira-os.github.io/linxira-wiki/**.
 
-The wiki is bilingual: the Chinese pages live under `docs/项目总览/` and
-`docs/Linxira 特性/`; the English edition lives under `docs/en/`. First-party
+The wiki is bilingual with one page tree and a language selector: the Chinese
+pages live at the `docs/` root, and each English counterpart sits at the same
+relative path under `docs/en/` (for example `docs/software/config.md` and
+`docs/en/software/config.md`), built by `mkdocs-static-i18n`. First-party
 software usage is documented in both languages; Zeta and Linxira Bio SDK are
 external products, so their pages are entry points to their own documentation,
 not copies of it.
@@ -30,15 +32,15 @@ not here.
 - **首页**: what Linxira OS is (a KDE Plasma / COSMIC personal scientific
   workstation distribution built directly on Arch Linux) and the documentation
   scope.
-- **项目总览**: the cross-project map — Config CLI, Components, Recovery
+- **项目总览** (`docs/software/`): the cross-project map — Config CLI, Components, Recovery
   Diagnostics, Workspace Guard, and the WSL distribution — with the ownership
   table generated from `linxira-os/governance/repositories.yaml`. The English
   [software index](docs/en/software/index.md) carries the same ownership and
   lifecycle table; the Chinese overview remains authoritative.
-- **Linxira 特性**: Direct Arch architecture, branding system, Config Hub,
+- **Linxira 特性** (`docs/features/`): Direct Arch architecture, branding system, Config Hub,
   preinstalled tools, and workflow templates (scientific, AI, development,
   container, bioinformatics).
-- **外部链接**: pointers to the Arch Wiki and notes on other distributions.
+- **外部链接** (`docs/external/`): pointers to the Arch Wiki and notes on other distributions.
 
 ## Two synchronized forms, one source of truth
 

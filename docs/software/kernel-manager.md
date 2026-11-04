@@ -26,7 +26,7 @@
 - 不写 GRUB、不生成 initramfs、不安装或删除包、不改服务。
 - 不支持自定义内核或第三方内核包。
 - 不实现提权与事务后端；Apply 按钮固定不可用。内核包与驱动计划的交界在
-  [硬件与驱动管理器](linxira-hardware-driver-manager.md)。
+  [硬件与驱动管理器](hardware-driver-manager.md)。
 
 ## 责任链：谁读、谁规划、谁改动
 
@@ -37,7 +37,7 @@
 | 安装内核 / 重建 initramfs / 写 GRUB | 目前没有执行者 | 未实现 |
 
 第三行是本页最需要看清的事实：计划里的命令只是展示文本，**当前没有任何组件会执行它们**。
-将来若接入执行能力，提权也只应走 [Components](linxira-components.md) 的 Polkit 路径。
+将来若接入执行能力，提权也只应走 [Components](components.md) 的 Polkit 路径。
 
 ## 怎么用
 
@@ -97,7 +97,7 @@ linxira-kernel-manager --plan org.linxira.bootloader.refresh-grub.v1
 
 目前不需要，也不提供。所有子命令都是只读或写用户自己的计划目录；程序不调用
 `sudo`、`pkexec`、包管理器、服务写入、initramfs 生成或引导器写入。将来若接入
-事务后端，授权也应走 [Components](linxira-components.md) 的 Polkit 路径。
+事务后端，授权也应走 [Components](components.md) 的 Polkit 路径。
 
 ## 已知限制
 
@@ -114,4 +114,4 @@ linxira-kernel-manager --plan org.linxira.bootloader.refresh-grub.v1
 当前行为与边界见
 [`linxira-kernel-manager` README](https://github.com/Linxira-OS/linxira-kernel-manager/blob/main/README.md)，
 维护者约定见仓库的 `AGENTS.md`；内核与驱动的交界见
-[硬件与驱动管理器](linxira-hardware-driver-manager.md)。
+[硬件与驱动管理器](hardware-driver-manager.md)。

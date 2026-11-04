@@ -30,90 +30,97 @@ theme:
 repo_url: https://github.com/Linxira-OS/linxira-wiki
 repo_name: Linxira-OS/linxira-wiki
 
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: zh
+          name: 中文
+          default: true
+          build: true
+        - locale: en
+          name: English
+          build: true
+          nav_translations:
+            首页: Home
+            项目总览: Software
+            索引: Index
+            系统入口: System entry
+            欢迎中心: Welcome
+            更新助手: Update
+            恢复诊断: Recovery
+            崩溃监视: Crash Watch
+            工作区守护: Workspace Guard
+            软件管理: Software management
+            硬件与内核: Hardware and kernel
+            数据与签名: Data and signing
+            平台与 Agent: Platform and agents
+            WSL 发行版: WSL
+            Agent 工作区: Agent Workspace
+            Agent 技能: Agent Skills
+            外部产品: External products
+            Linxira 特性: Features
+            Direct Arch 架构: Direct Arch Architecture
+            品牌系统: Branding
+            配置中心: Config Hub
+            预装工具: Preinstalled Tools
+            工作流模板: Workflows
+            外部链接: External
+            法律与安全: Legal & Security
+            许可与法律: License & Legal
+            安全与贡献: Security & Contribution
+            相关站点: Related sites
+            返回官网: Official site
+            快速上手（文档站）: Quick start (docs site)
+            博客: Blog
+            下载镜像: Download
+
 nav:
   - 首页: index.md
   - 项目总览:
-      - 索引: 项目总览/index.md
+      - 索引: software/index.md
       - 系统入口:
-          - Config CLI: 项目总览/linxira-config.md
-          - Components: 项目总览/linxira-components.md
-          - 欢迎中心: 项目总览/linxira-welcome.md
-          - 更新助手: 项目总览/linxira-update.md
-          - 恢复诊断: 项目总览/linxira-recovery.md
-          - 崩溃监视: 项目总览/linxira-crash-watch.md
-          - 工作区守护: 项目总览/workspace-guard.md
+          - Config CLI: software/config.md
+          - Components: software/components.md
+          - 欢迎中心: software/welcome.md
+          - 更新助手: software/update.md
+          - 恢复诊断: software/recovery.md
+          - 崩溃监视: software/crash-watch.md
+          - 工作区守护: software/workspace-guard.md
       - 软件管理:
-          - Package Center: 项目总览/linxira-package-center.md
-          - Component Manager: 项目总览/linxira-component-manager.md
-          - Completion Agent: 项目总览/linxira-completion-agent.md
-          - Gaming Manager: 项目总览/linxira-gaming-manager.md
+          - Package Center: software/package-center.md
+          - Component Manager: software/component-manager.md
+          - Completion Agent: software/completion-agent.md
+          - Gaming Manager: software/gaming-manager.md
       - 硬件与内核:
-          - HWD Detector: 项目总览/linxira-hwd-detector.md
-          - Hardware Driver Manager: 项目总览/linxira-hardware-driver-manager.md
-          - Kernel Manager: 项目总览/linxira-kernel-manager.md
+          - HWD Detector: software/hwd-detector.md
+          - Hardware Driver Manager: software/hardware-driver-manager.md
+          - Kernel Manager: software/kernel-manager.md
       - 数据与签名:
-          - Catalog: 项目总览/linxira-catalog.md
-          - Keyring: 项目总览/linxira-keyring.md
+          - Catalog: software/catalog.md
+          - Keyring: software/keyring.md
       - 平台与 Agent:
-          - WSL 发行版: 项目总览/linxira-wsl.md
-          - Agent 工作区: 项目总览/agent-workspace.md
-          - Agent 技能: 项目总览/agent-skills.md
+          - WSL 发行版: software/wsl.md
+          - Agent 工作区: software/agent-workspace.md
+          - Agent 技能: software/agent-skills.md
       - 外部产品:
-          - Zeta: 项目总览/linxira-zeta.md
-          - Bio SDK: 项目总览/linxira-bio-sdk.md
+          - Zeta: software/zeta.md
+          - Bio SDK: software/bio-sdk.md
   - Linxira 特性:
-    - Direct Arch 架构: Linxira 特性/architecture.md
-    - 品牌系统: Linxira 特性/branding.md
-    - 配置中心: Linxira 特性/config-hub.md
-    - 预装工具: Linxira 特性/preinstalled-tools.md
-    - 工作流模板: Linxira 特性/workflows.md
-  - English:
-      - Home: en/index.md
-      - Software:
-          - Index: en/software/index.md
-          - System entry:
-              - Welcome: en/software/welcome.md
-              - Completion Agent: en/software/completion-agent.md
-              - Gaming Manager: en/software/gaming-manager.md
-          - Software management:
-              - Components: en/software/components.md
-              - Package Center: en/software/package-center.md
-              - Component Manager: en/software/component-manager.md
-              - Update: en/software/update.md
-          - Hardware and kernel:
-              - HWD Detector: en/software/hwd-detector.md
-              - Hardware Driver Manager: en/software/hardware-driver-manager.md
-              - Kernel Manager: en/software/kernel-manager.md
-          - Data and signing:
-              - Catalog: en/software/catalog.md
-              - Keyring: en/software/keyring.md
-          - Platform and diagnostics:
-              - Config: en/software/config.md
-              - Recovery: en/software/recovery.md
-              - Crash Watch: en/software/crash-watch.md
-              - Workspace Guard: en/software/workspace-guard.md
-              - Agent Workspace: en/software/agent-workspace.md
-              - Agent Skills: en/software/agent-skills.md
-              - WSL: en/software/wsl.md
-          - External products:
-              - Zeta: en/software/zeta.md
-              - Bio SDK: en/software/bio-sdk.md
-      - Features:
-          - Direct Arch Architecture: en/features/architecture.md
-          - Branding: en/features/branding.md
-          - Config Hub: en/features/config-hub.md
-          - Preinstalled Tools: en/features/preinstalled-tools.md
-          - Workflows: en/features/workflows.md
-      - External:
-          - Arch Wiki: en/external/arch-wiki.md
-      - Legal & Security:
-          - License & Legal: en/legal/license.md
-          - Security & Contribution: en/legal/security.md
+      - Direct Arch 架构: features/architecture.md
+      - 品牌系统: features/branding.md
+      - 配置中心: features/config-hub.md
+      - 预装工具: features/preinstalled-tools.md
+      - 工作流模板: features/workflows.md
   - 外部链接:
-    - Arch Wiki: 外部链接/arch-wiki.md
+      - Arch Wiki: external/arch-wiki.md
   - 法律与安全:
-      - 许可与法律: 法律与安全/license.md
-      - 安全与贡献: 法律与安全/security.md
+      - 许可与法律: legal/license.md
+      - 安全与贡献: legal/security.md
   - 相关站点:
       - 返回官网: https://linxira-os.github.io/zh/
       - 快速上手（文档站）: https://linxira-os.github.io/zh/docs/
@@ -122,10 +129,8 @@ nav:
       - GitHub: https://github.com/Linxira-OS
 
 not_in_nav: |
-  /外部链接/debian.md
-  /外部链接/mint.md
-  /en/external/debian.md
-  /en/external/mint.md
+  /external/debian.md
+  /external/mint.md
 
 markdown_extensions:
   - admonition

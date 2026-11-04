@@ -17,13 +17,13 @@ catalog 的只读查询、`tui` 数字菜单，以及给 agent 读的能力清�
 
 **不归它**：
 
-- **装软件不归它**。软件安装、分组与组件由 [`linxira-components`](linxira-components.md) 产出 plan。
+- **装软件不归它**。软件安装、分组与组件由 [`linxira-components`](components.md) 产出 plan。
   CLI 里的 `install` / `workflow` 入口会直接拒绝并指向正确的归属。
-- **系统恢复不归它**。出问题要证据包时用 [`linxira-recovery-diagnostics`](linxira-recovery.md)。
+- **系统恢复不归它**。出问题要证据包时用 [`linxira-recovery-diagnostics`](recovery.md)。
 - **catalog 内容不归它**。应用、组件与 bundle 的数据在 [`linxira-catalog`](https://github.com/Linxira-OS/linxira-catalog)；
   CLI 只按 catalog ID 查询，不展开、不应用任何记录。
 - **安装逻辑不归它**。`stack` 只是到 `linxira-component-manager` 的转发桥，
-  plan → confirm → apply 仍在 [`linxira-components`](linxira-components.md) 里完成。
+  plan → confirm → apply 仍在 [`linxira-components`](components.md) 里完成。
 - **事务后端没准备好的写操作不归它**。`service`、`rdp`、`virt`、`power` 的变更动作、
   `security harden` 与 `net fix` 会明确报「等待事务后端」，而不是给一个半成品实现。
 

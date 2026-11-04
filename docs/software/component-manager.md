@@ -18,12 +18,12 @@
 **不归它**：
 
 - **不把组件 ID 展开成包名**，也不直接调用任何包管理器。
-- **不做计划、确认与特权执行**。那三步在 [`linxira-components`](linxira-components.md)。
+- **不做计划、确认与特权执行**。那三步在 [`linxira-components`](components.md)。
 - **不做移除**。Phase 1 只安装已就绪的软件包目标。
 - **不定义元数据**。bundle、角色、选择策略都来自 catalog。
 
 **委托出去的事务**：三条入口最终都落到同一条链，归属方是
-[`linxira-components`](linxira-components.md)——写入选择文档后执行 `plan`，
+[`linxira-components`](components.md)——写入选择文档后执行 `plan`，
 展示不可变的 `request-plan.json`，确认后执行
 `confirm --catalog ... --plan ... --output-dir ...`，若存在
 `directPackageTargets` 再通过 `pkexec apply --confirmation ...` 提权执行；回执由后端
@@ -114,5 +114,5 @@ GUI、TUI 与 CLI 的授权模式默认是 `auto`：**以 root 运行时直接�
 ## 深入设计
 
 嵌套示例见仓库的 `examples/catalog-v3.example.json`；事务形状见
-[Components](linxira-components.md)，内部实现见
+[Components](components.md)，内部实现见
 [`linxira-component-manager`](https://github.com/Linxira-OS/linxira-component-manager)。

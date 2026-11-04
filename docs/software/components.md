@@ -19,7 +19,7 @@ transaction-planning、confirmation、privileged-apply、receipts 的项目。
 
 - **不决定「装什么」**。软件与组件的清单在 [`linxira-catalog`](https://github.com/Linxira-OS/linxira-catalog)。
 - **不做 UI**。界面在 `linxira-package-center` 与 `linxira-component-manager`，它们调用本项目，不复制本项目的逻辑。
-- **不做通用设置**。镜像源、SSH、防火墙等在 [`linxira-config`](linxira-config.md)。
+- **不做通用设置**。镜像源、SSH、防火墙等在 [`linxira-config`](config.md)。
 
 ## 怎么用
 

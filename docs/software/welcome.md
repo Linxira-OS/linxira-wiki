@@ -18,14 +18,14 @@
 
 **不归它**：
 
-- **装软件不归它**。软件在[快速配置系统软件](linxira-package-center.md)，
-  运行时与组件在[快速配置系统运行时](linxira-component-manager.md)。
+- **装软件不归它**。软件在[快速配置系统软件](package-center.md)，
+  运行时与组件在[快速配置系统运行时](component-manager.md)。
 - **不提权**。所有按钮都是「以当前用户启动某个固定程序」，没有 `sudo`，
   没有 `pkexec`，也不改系统设置。
 - **不是软件清单**。可安装软件、应用类别、运行时子命令仍然属于各自的
   catalog 与产品，Welcome 不复刻它们。
 - **不做配置**。系统页只是把 `linxira-config` 的子命令交给终端，
-  真正的设置在[Config CLI](linxira-config.md)。
+  真正的设置在[Config CLI](config.md)。
 
 ## 怎么用
 
@@ -93,4 +93,4 @@ Config CLI 只是在当前桌面默认终端里打开（KDE 用 `konsole --hold 
 
 内部实现见 [`linxira-welcome`](https://github.com/Linxira-OS/linxira-welcome)
 仓库；目录与回执的契约分别见 [Linxira Catalog](https://github.com/Linxira-OS/linxira-catalog)
-和[快速配置系统软件](linxira-package-center.md)。
+和[快速配置系统软件](package-center.md)。

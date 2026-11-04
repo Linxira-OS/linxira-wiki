@@ -18,7 +18,7 @@
 
 - **装软件不归它**。组件安装走 `linxira-component-manager`
   （Config CLI 的 `stack` 也是转发到它），与更新共用同一套快照保护。
-- **快照配置不归它**。Timeshift 的启用与策略在 [`linxira-config`](linxira-config.md)
+- **快照配置不归它**。Timeshift 的启用与策略在 [`linxira-config`](config.md)
   的 `timeshift enable|disable|status`。
 - **AUR 与 Flatpak 默认不碰**。需在配置里显式 opt-in。
 

@@ -24,7 +24,7 @@
 **不归它**：
 
 - 不做计划、不确认、不执行、不出回执——这些是
-  [Components](linxira-components.md) 的职责。
+  [Components](components.md) 的职责。
 - 不提供用户命令；它安装的是数据与 schema，不是 CLI。
 - 不包含可执行命令字符串。`operations[]` 里只有固定的受控操作 ID。
 - 不消费下游仓库：安装器与各管理器只读固定路径，不回写目录数据。
@@ -70,7 +70,7 @@ Schema 是严格的：顶层 `additionalProperties` 为 `false`，契约之外�
 | [Package Center](https://github.com/Linxira-OS/linxira-package-center) | 已安装状态与软件呈现 |
 | [Component Manager](https://github.com/Linxira-OS/linxira-component-manager) | 运行时、工具与能力状态 |
 | [Completion Agent](https://github.com/Linxira-OS/linxira-completion-agent) | 首次联网后的补齐计划 |
-| [Components](linxira-components.md) | 从叶子 ID 生成事务计划 |
+| [Components](components.md) | 从叶子 ID 生成事务计划 |
 
 维护者的校验入口：
 
@@ -96,4 +96,4 @@ python -m unittest discover -s tests -v
 
 数据与 schema 见
 [`linxira-catalog`](https://github.com/Linxira-OS/linxira-catalog)；
-事务如何消费叶子 ID 见 [Components](linxira-components.md)。
+事务如何消费叶子 ID 见 [Components](components.md)。

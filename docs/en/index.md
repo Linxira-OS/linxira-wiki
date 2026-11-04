@@ -34,7 +34,7 @@ Every Linxira-specific program has a page in the [software index](software/index
 
 ## Project overview
 
-The [software index](software/index.md#project-overview) carries the full repository ownership and lifecycle table in English: which repository owns which capability, and whether it is active, review-required, independent, paused or deprecated. The Chinese [project overview](../项目总览/index.md) remains the authoritative source for that data; the English table is translated from it, and the English software index also groups the same programs by workflow.
+The [software index](software/index.md#project-overview) carries the full repository ownership and lifecycle table in English: which repository owns which capability, and whether it is active, review-required, independent, paused or deprecated. The Chinese-language overview remains the authoritative source for that data — switch language with the selector in the header to read it — and this index also groups the same programs by workflow.
 
 ## Boundaries of use
 

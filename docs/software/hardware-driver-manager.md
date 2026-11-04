@@ -18,17 +18,17 @@
 
 **不归它**：
 
-- 不探测硬件（[硬件检测](linxira-hwd-detector.md) 的事）。
-- 不实现事务后端、快照与 Polkit（[Components](linxira-components.md) 的事）。
-- 不管理内核包本身（[内核管理器](linxira-kernel-manager.md) 的事）。
+- 不探测硬件（[硬件检测](hwd-detector.md) 的事）。
+- 不实现事务后端、快照与 Polkit（[Components](components.md) 的事）。
+- 不管理内核包本身（[内核管理器](kernel-manager.md) 的事）。
 
 ## 责任链：谁读、谁规划、谁改动
 
 | 步骤 | 执行者 | 是否改动系统 |
 |---|---|---|
-| 采集硬件事实 | [硬件检测](linxira-hwd-detector.md)（无参 JSON） | 只读 |
+| 采集硬件事实 | [硬件检测](hwd-detector.md)（无参 JSON） | 只读 |
 | 事实 → 固定策略 → 计划 | 本管理器 | 只读；计划只写用户状态目录 |
-| 执行驱动安装、快照、服务校验 | [Components](linxira-components.md) 系统事务服务 + Polkit | 提权，需确认与 Timeshift 快照 |
+| 执行驱动安装、快照、服务校验 | [Components](components.md) 系统事务服务 + Polkit | 提权，需确认与 Timeshift 快照 |
 
 本管理器的所有本地动作都止于「计划」。**Apply 不是本程序执行的**：它只是向
 `org.linxira.Components1` 申请计划并请求确认执行，真正的包安装、服务启用与快照由事务后端完成。
@@ -128,4 +128,4 @@ linxira-hardware-driver-manager --plan org.linxira.driver.intel-mesa.v1 --json
 
 当前行为与边界见
 [`linxira-hardware-driver-manager` README](https://github.com/Linxira-OS/linxira-hardware-driver-manager/blob/main/README.md)，
-维护者约定见仓库的 `AGENTS.md`；事务形态见 [Components](linxira-components.md)。
+维护者约定见仓库的 `AGENTS.md`；事务形态见 [Components](components.md)。

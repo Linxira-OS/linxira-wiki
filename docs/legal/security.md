@@ -65,7 +65,7 @@
 - [贡献指南](https://linxira-os.github.io/zh/docs/contributing/)
 - [维护、信任与软件安全](https://linxira-os.github.io/zh/docs/maintenance-security/)
 - [许可与法律](license.md)
-- [更新助手（linxira-update）](../项目总览/linxira-update.md)：更新与快照的实际行为
+- [更新助手（linxira-update）](../software/update.md)：更新与快照的实际行为
 
 ---
 

@@ -15,8 +15,8 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 
 | 部分 | 归属 | 内容 |
 |---|---|---|
-| 快照与恢复的执行 | [`linxira-components`](linxira-components.md) | `linxira-components-guard` 的 snapshot / restore，以及快照定时器 |
-| 仓库目录、注册、启用 | [`linxira-config`](linxira-config.md) | `linxira-config workspace-guard enable` |
+| 快照与恢复的执行 | [`linxira-components`](components.md) | `linxira-components-guard` 的 snapshot / restore，以及快照定时器 |
+| 仓库目录、注册、启用 | [`linxira-config`](config.md) | `linxira-config workspace-guard enable` |
 | 装机时写入同盘配置 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | `shellprocess@linxira-workspace-guard` 装机脚本 |
 | 文档 | 本 wiki | 本页与 `ai/topics/workspace-guard.md` |
 
