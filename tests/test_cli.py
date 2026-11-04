@@ -93,6 +93,8 @@ def test_show_reads_topic_and_docs_page():
     page = run_cli("show", "config", root=REPOSITORY_ROOT)
     assert page.returncode == 0
     assert "## 为什么存在" in page.stdout
+    # 同名英文页在 docs/en/ 下，不应被拼进默认语言输出
+    assert "## Why it exists" not in page.stdout
 
 
 def test_list_covers_every_docs_page():
