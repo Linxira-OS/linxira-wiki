@@ -6,7 +6,8 @@ at **https://linxira-os.github.io/linxira-wiki/**.
 The wiki is bilingual: the Chinese pages live under `docs/项目总览/` and
 `docs/Linxira 特性/`; the English edition lives under `docs/en/`. First-party
 software usage is documented in both languages; Zeta and Linxira Bio SDK are
-deliberate placeholders only.
+external products, so their pages are entry points to their own documentation,
+not copies of it.
 
 The wiki records only what is unique to Linxira OS — the installer, Welcome,
 Shelly, Config Hub, the software catalog, workflows, and branding — and
@@ -31,7 +32,9 @@ not here.
   scope.
 - **项目总览**: the cross-project map — Config CLI, Components, Recovery
   Diagnostics, Workspace Guard, and the WSL distribution — with the ownership
-  table generated from `linxira-os/governance/repositories.yaml`.
+  table generated from `linxira-os/governance/repositories.yaml`. The English
+  [software index](docs/en/software/index.md) carries the same ownership and
+  lifecycle table; the Chinese overview remains authoritative.
 - **Linxira 特性**: Direct Arch architecture, branding system, Config Hub,
   preinstalled tools, and workflow templates (scientific, AI, development,
   container, bioinformatics).

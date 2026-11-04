@@ -30,11 +30,11 @@ The wiki discusses **the general design of each project**: why it exists, its re
 
 ## Software
 
-Every Linxira-specific program has a page in the [software index](software/index.md), grouped by the workflow it belongs to: system entry, software management, hardware and kernel, data and signing, platform and diagnostics, and placeholders.
+Every Linxira-specific program has a page in the [software index](software/index.md), grouped by the workflow it belongs to: system entry, software management, hardware and kernel, data and signing, platform and diagnostics, and external products.
 
 ## Project overview
 
-The software section covers every first-party program in English. The repository ownership and lifecycle table remains in the Chinese [project overview](../项目总览/index.md), which is the authoritative source; the English [software index](software/index.md) groups the same programs by workflow.
+The [software index](software/index.md#project-overview) carries the full repository ownership and lifecycle table in English: which repository owns which capability, and whether it is active, review-required, independent, paused or deprecated. The Chinese [project overview](../项目总览/index.md) remains the authoritative source for that data; the English table is translated from it, and the English software index also groups the same programs by workflow.
 
 ## Boundaries of use
 

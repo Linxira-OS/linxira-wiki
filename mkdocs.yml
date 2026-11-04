@@ -58,7 +58,7 @@ nav:
           - WSL 发行版: 项目总览/linxira-wsl.md
           - Agent 工作区: 项目总览/agent-workspace.md
           - Agent 技能: 项目总览/agent-skills.md
-      - 占位:
+      - 外部产品:
           - Zeta: 项目总览/linxira-zeta.md
           - Bio SDK: 项目总览/linxira-bio-sdk.md
   - Linxira 特性:
@@ -95,7 +95,7 @@ nav:
               - Agent Workspace: en/software/agent-workspace.md
               - Agent Skills: en/software/agent-skills.md
               - WSL: en/software/wsl.md
-          - Placeholders:
+          - External products:
               - Zeta: en/software/zeta.md
               - Bio SDK: en/software/bio-sdk.md
       - Features:
@@ -106,8 +106,14 @@ nav:
           - Workflows: en/features/workflows.md
       - External:
           - Arch Wiki: en/external/arch-wiki.md
+      - Legal & Security:
+          - License & Legal: en/legal/license.md
+          - Security & Contribution: en/legal/security.md
   - 外部链接:
     - Arch Wiki: 外部链接/arch-wiki.md
+  - 法律与安全:
+      - 许可与法律: 法律与安全/license.md
+      - 安全与贡献: 法律与安全/security.md
   - 相关站点:
       - 返回官网: https://linxira-os.github.io/zh/
       - 快速上手（文档站）: https://linxira-os.github.io/zh/docs/
@@ -118,6 +124,8 @@ nav:
 not_in_nav: |
   /外部链接/debian.md
   /外部链接/mint.md
+  /en/external/debian.md
+  /en/external/mint.md
 
 markdown_extensions:
   - admonition

@@ -46,7 +46,7 @@ linxira-welcome --autostart  # 登录自启动条目使用的形式
   延后的软件或组件，会出现对应的继续横幅，分别打开软件设置与运行时设置。
   下方是固定启动器：软件中心（Shelly）、快速配置系统软件、快速配置系统运行时、
   在终端里的 Config CLI、系统设置和终端；装好的系统还多出系统更新、游戏管理器、
-  硬件与驱动、恢复诊断。
+  硬件与驱动、恢复诊断，并额外显示一条驱动快速配置横幅（同样是打开硬件与驱动）。
 - **状态**。列出发行版本、内核、网络、catalog 是否可用及审核版本、安装回执状态、
   可用更新数、上次检查时间、是否需要重启，以及安装时选择的 profile 与应用。
 - **终端**。bash 是系统基线与默认登录 shell，始终安装；fish、nushell、zsh 未安装时
@@ -65,18 +65,27 @@ linxira-welcome --autostart  # 登录自启动条目使用的形式
 ## 何时需要 root
 
 **从不需要。** Welcome 里没有任何提权路径：启动器是固定的可执行文件加固定参数；
-Config CLI 只是在当前桌面默认终端里打开（KDE 用 Konsole，COSMIC 用 `cosmic-term`）；
-终端页把 `chsh` 命令交给用户自己执行。
+Config CLI 只是在当前桌面默认终端里打开（KDE 用 `konsole --hold -e`；COSMIC 下
+把 `SHELL` 指向 `linxira-config` 再启动 `cosmic-term`，1.10 与 1.11 都可用）；
+系统页的条目带参数，COSMIC 上直接用 `cosmic-term -e`。终端页把 `chsh` 命令
+复制到剪贴板，由用户自己执行。
 需要 root 的动作由对应工具按各自的授权模型处理。
+
+启动器只启动固定程序：`linxira-update --launch`（系统更新）、
+`linxira-recovery-diagnostics-gui`（恢复诊断）、`/usr/local/bin/linxira-installer-shell`
+（Live 安装）。可执行文件不存在时，对应磁贴是禁用的。
 
 ## 已知限制
 
 - 它只是入口和状态面板，不呈现各工具的实时运行状态（状态页列出的字段除外）。
 - 系统页依赖 `linxira-config-hub` 提供的 `/usr/share/linxira/agent/capabilities.json`；
   文件缺失时该页为空并提示清单未安装。
-- 终端分发按桌面区分：COSMIC 用 `cosmic-term -e`，KDE 用 `konsole --hold -e`，
-  `alacritty`/`xterm` 作为回退；命令直接交给终端，不再依赖 COSMIC 上不可靠的
-  `Terminal=true`/`gtk-launch` 接力。
+- 终端分发按桌面区分：COSMIC 优先 `cosmic-term`，KDE 优先 `konsole --hold -e`；
+  `alacritty -e`、`xterm -hold -e` 依次回退。单命令（Config CLI）在 COSMIC 上走
+  `SHELL` 注入，因此 cosmic-term 1.10 也能用；其余命令使用终端的 exec 标志。
+  所有终端都不可用时，才会写一个临时 `Terminal=true` 条目交给 `gtk-launch`。
+- 系统页只显示能力清单里带 `welcome` 元数据的命令；`mutating` 条目除非在清单里
+  显式 opt-in，否则不会出现。系统页不会因为缺少某条命令而报错，只是少一个磁贴。
 - Live 镜像使用临时配置，每次重新进入 Live 都会再次弹出，登录设置不会跨启动保留。
 - 翻译覆盖十种语言，其余语言按英语显示。
 

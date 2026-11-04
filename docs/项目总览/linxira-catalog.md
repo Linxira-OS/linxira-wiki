@@ -27,6 +27,31 @@
   [Components](linxira-components.md) 的职责。
 - 不提供用户命令；它安装的是数据与 schema，不是 CLI。
 - 不包含可执行命令字符串。`operations[]` 里只有固定的受控操作 ID。
+- 不消费下游仓库：安装器与各管理器只读固定路径，不回写目录数据。
+
+## 条目契约
+
+每个叶子（桌面、应用、组件、bundle）都要在数据里声明足以让下游安全显示与默认选择的信息：
+
+| 字段 | 作用 |
+|---|---|
+| `id` / `kind` / `name` | 稳定 ID、条目类型，以及 `zh_CN` 与 `en` 两种显示名 |
+| `primaryCategory` | 唯一归属的类别；类别自己声明 `selection.mode`（`multi` / `exclusive` / `bounded` / `preset`） |
+| `provider` / `source` / `artifact` | 由哪个生态提供（`pacman`、`aur`、`flatpak`、`conda`、`pip`、`builtin`）、来自哪个来源、装哪些包标识符 |
+| `license` | 许可分类、SPDX 标识、是否可再分发、是否需要用户接受 |
+| `review` | 评审状态与日期 |
+| `availability` | `available` / `review-channel` / `unavailable`、`offlinePolicy`，以及 `default` 或 `optional-review` 通道 |
+| `presentation` | 是否推荐、是否默认选中、排序、是否在安装器可见 |
+
+Schema 是严格的：顶层 `additionalProperties` 为 `false`，契约之外的多余字段会让校验失败。`catalogVersion` 固定为 `3`，`release` 形如 `YYYY.MM`。
+
+## 评审契约
+
+- `review.status` 只有四个值：`reviewed`、`vm-test-pending`、`source-review-pending`、`legal-review-pending`。只有 `reviewed` 的叶子可以被默认选中。
+- 安装器可见的叶子还要求 `review.status == "reviewed"`；评审中的候选留在 `review-channel`，绝不被默认选中。
+- 外部生态（AUR、Conda、专有软件）默认禁用，必须由用户显式选择加入；`conda-forge` 与 `bioconda` 是显式来源，基础系统从不启用。
+- `operations[]` 只放固定的受控操作 ID（`reviewed` 或 `vm-test-pending`），永远不是 shell 字符串。
+- 类别根 bundle 的成员必须按顺序恰好镜像该类别子项，全部为 optional 引用；嵌套 bundle 必须构成 DAG。
 
 ## 怎么用
 
@@ -64,9 +89,6 @@ python -m unittest discover -s tests -v
 
 - 安装包只带 v3 数据与 schema；v2 仍留在仓库中供旧消费者使用，不要在 v3 里复用
   v2 的 `profiles[]` 能力模型。
-- 外部生态（AUR、Conda、专有软件）默认禁用，必须由用户显式选择加入；待评审候选
-  留在 review 通道，绝不被默认选中。
-- 安装器可选的叶子还要求 `review.status == "reviewed"`。
 - 选择与回执以叶子 ID 为键，不是树路径；删除叶子或改稳定 ID 会影响所有下游消费者。
 - 目录只给包标识符与元数据，不给安装命令；看到「目录里有」不等于「已经安装」。
 

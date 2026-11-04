@@ -15,7 +15,7 @@ agent 在用户的工作区里以**完整的用户权限**运行。它能 `rm -r
 
 | 部分 | 归属 | 内容 |
 |---|---|---|
-| 快照与恢复的执行 | [`linxira-components`](linxira-components.md) | `guard_store` / `guard_worker` / `guard_cli` / 定时器 |
+| 快照与恢复的执行 | [`linxira-components`](linxira-components.md) | `linxira-components-guard` 的 snapshot / restore，以及快照定时器 |
 | 仓库目录、注册、启用 | [`linxira-config`](linxira-config.md) | `linxira-config workspace-guard enable` |
 | 装机时写入同盘配置 | [`linxira-iso-direct`](https://github.com/Linxira-OS/linxira-iso-direct) | `shellprocess@linxira-workspace-guard` 装机脚本 |
 | 文档 | 本 wiki | 本页与 `ai/topics/workspace-guard.md` |
@@ -47,7 +47,8 @@ sudo linxira-config workspace-guard enable
 
 在系统盘创建 root-only 的 `/var/lib/linxira/guard`，写配置、注册工作区、
 开启定时器。不创建分区，不改分区表，不碰第二块盘。命令幂等。
-装机阶段默认执行同一套同盘配置；`enable` 用于补建或重新启用。
+装机阶段默认执行同一套同盘配置（脚本失败不会阻塞安装，守护保持关闭）；
+`enable` 用于补建或重新启用。
 
 ```bash
 sudo linxira-config workspace-guard disable   # 只停定时器，保留仓库数据
@@ -58,31 +59,44 @@ sudo linxira-config workspace-guard disable   # 只停定时器，保留仓库�
 ```bash
 linxira-config workspace-guard status
 linxira-config workspace-guard status --json
-linxira-components guard status
-linxira-components guard list ~/Linxira-OS
-linxira-components guard list ~/Linxira-OS --json
+linxira-components-guard status
+linxira-components-guard list ~/Linxira-OS
+linxira-components-guard list ~/Linxira-OS --json
 ```
 
-未配置时这些命令安全降级，不报错——未配置是正常状态。
+未配置时这些命令安全降级，不报错——未配置是正常状态。`linxira-config workspace-guard handbook`
+还会打印 AI 可读的手册清单。
 
 ### 恢复点操作（Polkit 授权）
 
 ```bash
-linxira-components guard snapshot ~/Linxira-OS
-linxira-components guard restore <id> --target ~/ws-restored
+linxira-components-guard snapshot ~/Linxira-OS
+linxira-components-guard restore <id> --target ~/ws-restored
 ```
 
 ### 登记工作区（root）
 
 ```bash
-sudo linxira-components guard init
-sudo linxira-components guard register ~/Linxira-OS
-sudo linxira-components guard unregister ~/Linxira-OS
+sudo linxira-components-guard init
+sudo linxira-components-guard register ~/Linxira-OS
+sudo linxira-components-guard unregister ~/Linxira-OS
 ```
 
 登记写的是守护仓库自己的 root 登记表，没有用户可见的副作用，也没有需要回滚的东西，
 所以只允许管理员执行，不开一个能被反复触发的提权入口。
 非 root 运行会直接拒绝，不会静默半途而废。
+
+## 何时需要 root 与授权
+
+- **只读，免 root**：`linxira-config workspace-guard status [--json]`、
+  `linxira-components-guard status [--json]`、`linxira-components-guard list <path> [--json]`、
+  `linxira-config workspace-guard handbook`。
+- **需要 root**：`linxira-config workspace-guard enable|disable`，
+  以及 `linxira-components-guard init|register|unregister`。非 root 运行会被直接拒绝，
+  不会静默半途而废。
+- **Polkit 授权**：`linxira-components-guard snapshot` 与
+  `linxira-components-guard restore` 走系统 D-Bus 的计划与确认；Polkit 会要求
+  管理员认证。agent 可以发起，但不需要自己持有 sudo。
 
 ## 恢复点的生命周期
 
@@ -99,8 +113,23 @@ sudo linxira-components guard unregister ~/Linxira-OS
 3. **仓库目录 root-only。** `/var/lib/linxira/guard` 是 `root:root 0700`。
    普通用户读不到也改不了；root 可以读写和删除。
 
+## 已知限制
+
+- 仓库在根文件系统上（默认 `/var/lib/linxira/guard`），不建独立分区、不写 `/etc/fstab`。
+  `enable` 与安装器只提供同盘布局，没有选择另一块盘的选项；独立盘不在自动流程里。
+- 保留策略由 `enable` 写入的配置决定：定时快照保留 24 个、手动快照保留 10 个
+  （`keep_scheduled` / `keep_manual`）；更早的恢复点会被修剪。
+- 每次都是完整副本，不是增量或实时同步；仓库会随工作区大小增长，磁盘空间不足时
+  快照会失败并如实报告。
+- `enable` 只自动登记执行 sudo 的那个用户主目录下已存在的 `Linxira-OS`、`Projects`、
+  `work`、`src`；其他目录要用 `linxira-components-guard register` 显式加入。
+- 它不备份系统本身，也不备份整个主目录；这两件事分别属于 Timeshift 与用户自己的备份。
+- `restore` 只写新目录，且拒绝落在原工作区内、落在守护仓库内、或已存在且非空的目标；
+  它不提供「原地回滚」。
+- 非 root 读不到 `/etc/linxira/workspace-guard.conf` 时，`status` 会明说「present but not
+  readable」，恢复诊断则只能报告 `configured: false`。
+
 ## 深入设计
 
-数据结构、保留策略与快照目录布局见
-[`linxira-components`](https://github.com/Linxira-OS/linxira-components) 仓库的 `document/` 目录。
+保留策略与快照目录布局由 [`linxira-components`](https://github.com/Linxira-OS/linxira-components) 负责；权限分层写在 [`AGENTS.md`](https://github.com/Linxira-OS/linxira-components/blob/main/AGENTS.md)。
 机器可读摘要见 `linxira-wiki show workspace-guard`。

@@ -27,6 +27,31 @@ It describes software and the selection model; it never performs a package trans
 - Planning, confirmation, execution or receipts — that is [Components](components.md).
 - A user-facing command. The package installs data and schemas, not a CLI.
 - Executable command strings. `operations[]` contains fixed, controlled operation IDs only.
+- Any downstream repository. The installer and the managers read the fixed paths and never write the catalog back.
+
+## Entry contract
+
+Every leaf (desktop, application, component, bundle) declares enough for a downstream surface to display it and select it safely:
+
+| Field | Purpose |
+|---|---|
+| `id` / `kind` / `name` | Stable ID, entry kind, and the `zh_CN` and `en` display names |
+| `primaryCategory` | The single category it belongs to; the category declares its own `selection.mode` (`multi`, `exclusive`, `bounded` or `preset`) |
+| `provider` / `source` / `artifact` | Which ecosystem provides it (`pacman`, `aur`, `flatpak`, `conda`, `pip`, `builtin`), which source it comes from, and which package identifiers it installs |
+| `license` | License classification, SPDX identifier, redistributability, and whether the user must accept it |
+| `review` | Review status and date |
+| `availability` | `available`, `review-channel` or `unavailable`, the `offlinePolicy`, and the `default` or `optional-review` channel |
+| `presentation` | Recommended flag, default-selected flag, order, and installer visibility |
+
+The schema is strict: top-level `additionalProperties` is `false`, so any field outside the contract fails validation. `catalogVersion` is fixed at `3`, and `release` has the form `YYYY.MM`.
+
+## Review contract
+
+- `review.status` has exactly four values: `reviewed`, `vm-test-pending`, `source-review-pending` and `legal-review-pending`. Only a `reviewed` leaf may be default-selected.
+- Installer-visible leaves additionally require `review.status == "reviewed"`; candidates still in review stay in the `review-channel` and are never default-selected.
+- External ecosystems (AUR, Conda, proprietary software) are disabled by default and need an explicit user opt-in. `conda-forge` and `bioconda` are explicit sources that the base system never enables.
+- `operations[]` holds fixed, controlled operation IDs only (`reviewed` or `vm-test-pending`), never a shell string.
+- A category-root bundle must mirror its category's children in order, all as optional references; nested bundles must form a DAG.
 
 ## How to use
 
@@ -66,9 +91,6 @@ packaging.
 
 - The installed package ships v3 data and schema only. v2 remains in the repository for
   older consumers; do not reuse the v2 `profiles[]` capability model in v3.
-- External ecosystems (AUR, Conda, proprietary software) are disabled by default and need
-  explicit opt-in. Pending candidates stay in the review channel and are never default-selected.
-- Installer-eligible leaves also require `review.status == "reviewed"`.
 - Selection and receipts are keyed by leaf ID, not by tree path; removing a leaf or
   changing a stable ID affects every downstream consumer.
 - The catalog lists package identifiers and metadata, not installation commands. Being in

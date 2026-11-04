@@ -22,6 +22,16 @@
 - **不做移除**。Phase 1 只安装已就绪的软件包目标。
 - **不定义元数据**。bundle、角色、选择策略都来自 catalog。
 
+**委托出去的事务**：三条入口最终都落到同一条链，归属方是
+[`linxira-components`](linxira-components.md)——写入选择文档后执行 `plan`，
+展示不可变的 `request-plan.json`，确认后执行
+`confirm --catalog ... --plan ... --output-dir ...`，若存在
+`directPackageTargets` 再通过 `pkexec apply --confirmation ...` 提权执行；回执由后端
+写在 `/var/lib/linxira/components/receipts`。
+
+**三条入口自身都不提权**：GUI、TUI 与 CLI 都不调用 `sudo`、不执行 pacman、不写回执，
+也不把组件 ID 翻成包名。提权只可能来自 `pkexec`，且只发生在 `apply` 一步。
+
 ## 怎么用
 
 ### 图形界面
@@ -46,7 +56,7 @@ linxira-component-manager --select component-fish  # 预选叶子，可重复
 3. 显示不可变的 `request-plan.json`，分别列出 ready 包目标、pending 与 unsupported；
 4. 你确认后，对这份确切的计划运行 `linxira-components confirm`；
 5. 若 `directPackageTargets` 非空，运行
-   `pkexec linxira-components apply --catalog ... --confirmation ...`。
+   `pkexec linxira-components apply --confirmation ...`。
 
 没有任何直接包目标、只有 pending / unsupported 时，只确认，不请求 `pkexec`。
 pending 与 unsupported 永远不参与应用。
@@ -79,13 +89,15 @@ linxira-component-manager --catalog ./catalog-v3.json install component-fish
 - `install` 走同一条 `plan → confirm → apply` 链。`--dry-run` 只打印计划中的
   包目标；`--yes` 跳过交互确认（供 agent 使用）；`--json` 输出机器可读结果。
   未安装的 pending 项会在输出里单独说明并跳过。
-- 退出码：`0` 成功，`2` 选择或计划被拒，`3` 授权或执行失败，`64` 用法错误。
+- 退出码：`0` 成功，`2` 选择或计划被拒（catalog 不可用也算）、`3` 授权或执行失败，
+  `64` 没给子命令（此时打印帮助）。
 
 ## 何时需要 root
 
 GUI、TUI 与 CLI 的授权模式默认是 `auto`：**以 root 运行时直接执行 apply，
 普通用户运行时通过 `pkexec` 请求 Polkit 授权**。计划与确认两步都不提权。
-你不需要自己写 `sudo`；也不应该用 root 启动图形界面。
+你不需要自己写 `sudo`，也不应该用 root 启动图形界面——那样会绕过 Polkit 的确认；
+本仓库约定的提权路径只有 `linxira-components` + Polkit 这一条。
 
 ## 已知限制
 

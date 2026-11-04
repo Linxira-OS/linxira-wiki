@@ -22,12 +22,21 @@ sensitive items, and recording the deferred or completed state.
 
 - **Install decisions.** Which items may install, through which source and whether
   acceptance is required comes from the catalog and the receipt.
-- **Package transactions.** When applying, it also goes through the
-  [Components](components.md) `plan → confirm → apply` chain, with `pkexec` handling
-  elevation.
+- **Package transactions.** Installing is not done here; it is handed to
+  [Components](components.md).
 - **The installer's job.** Reviewed official Arch applications and components must be
   installed into the Calamares target before first boot; a receipt that defers such an
   item to Completion is rejected.
+
+**The delegated transaction**: when something is executable, the agent writes the
+receipt items as a selection document and hands it to the
+[Components](components.md) `plan → confirm → apply` chain, with `pkexec` elevating
+`apply`; receipts are written by the backend under
+`/var/lib/linxira/components/receipts`.
+
+**The agent never escalates by itself**: it runs as a normal user, only reads the
+catalog and the installer receipt, only writes its own state file, and never calls
+`sudo`, runs pacman or writes backend receipts.
 
 ## How to use
 

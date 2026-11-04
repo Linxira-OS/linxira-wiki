@@ -4,17 +4,33 @@
 
 A good share of Linxira's target users — developers who work with AI agents — spend their days on Windows while the agent's execution environment is Linux. Maintaining dual boot or a virtual machine for them is expensive; WSL2 is the native answer on the Windows side. linxira-wsl brings the Linxira toolchain into WSL as a rootfs distribution: no kernel, firmware or bootloader (WSL ships its own), only the parts that are actually used in a terminal.
 
+## Responsibilities
+
+**It owns**:
+
+- Building the rootfs `tar.gz` and matching `.sha256` used by `wsl --import` / `wsl --install --from-file`.
+- The package manifest `wsl-packages.x86_64`, the default `/etc/wsl.conf` (`wsl.conf`) and the read-only pre-release gate `verify-wsl-rootfs.sh`.
+- Deciding which first-party tools go into the image, and what is deliberately left out (kernel, firmware, bootloader, NetworkManager, Zeta).
+
+**It does not own**:
+
+- A desktop ISO; that is `linxira-iso-direct`, and this image is not published with the ISO.
+- Building the packages themselves; they come from the `packages` repository and are distributed through `[linxira]`.
+- WSL networking; name resolution, proxies and hosts are the Windows side's job.
+- Component transaction planning and execution; `linxira-components` is the single implementation of that chain.
+
 ## Relation to the desktop edition
 
 | | ISO install | WSL |
 |---|---|---|
 | Kernel / boot / partitioning | handled by the installer | not applicable (WSL ships the kernel) |
-| Desktop | catalog choice (Plasma / COSMIC / no desktop) | no session; GUI tools via WSLg (Win11) |
-| Software stack | chosen at install time / component-manager | `linxira-component-manager` (the same chain) |
+| Desktop | catalog choice (KDE Plasma / COSMIC / headless with full toolset / minimal headless) | no session; GUI tools via WSLg (Win11) |
+| Software stack | chosen at install time / component-manager | `linxira-component-manager` or `linxira-config stack` (the same chain) |
 | Workspace guard | timer every 30 minutes | not enabled by default (see below) |
-| Network management | NetworkManager | managed on the WSL side; NetworkManager is deliberately not installed |
+| Network management | NetworkManager | managed on the Windows side; the image deliberately installs no NetworkManager |
+| Zeta | full binary package (desktop route) | not shipped; use the npm package `@linxiraos/zeta`, which needs `nodejs` / `npm` installed first |
 
-**What the workspace guard means in WSL**: a WSL VM is shut down by Windows when no process is running, and systemd timers only fire while it runs — "a snapshot every 30 minutes" degrades into "a snapshot while a session is active". The image therefore leaves the guard off by default. Users who want it can run `linxira-config workspace-guard enable` manually, but should understand the trigger conditions.
+**What the workspace guard means in WSL**: a WSL VM is shut down by Windows when no process is running, and systemd timers only fire while it runs — "a snapshot every 30 minutes" degrades into "a snapshot while a session is active". The image therefore leaves the guard off by default. Users who want it can run `sudo linxira-config workspace-guard enable` manually, but should understand the trigger conditions.
 
 ## Usage
 
@@ -25,14 +41,70 @@ wsl -d linxira
 wsl --unregister linxira
 ```
 
-After import the default user is root, systemd is enabled (`/etc/wsl.conf`), the `[linxira]` repository uses the same configuration as the ISO install (with signature verification), and `linxira-update` works out of the box.
+After import the default user is root, systemd is enabled (`/etc/wsl.conf` sets `systemd=true`, `default=root` and `hostname=linxira`), the `[linxira]` repository uses the same configuration as the ISO install (with signature verification), and `linxira-update` works out of the box.
+
+The image ships no Node runtime. For the terminal flavour of Zeta:
+
+```bash
+sudo pacman -S nodejs npm
+npm i -g @linxiraos/zeta
+```
 
 ## Contents
 
-The full list is `wsl-packages.x86_64` in the repository (about 318 packages after dependency resolution, about 1.7 GB installed and about 0.5 GB compressed — that size was measured before `linxira-crash-watch` was added): `base` plus the first-party Linxira CLI toolchain (components / component-manager / config-hub / recovery-diagnostics / update / wiki / catalog / completion-agent). `linxira-update` pulls in the Qt graphics stack and can display directly under Win11 + WSLg.
+The full list is `wsl-packages.x86_64` in the repository, currently **37 explicit entries** (more than three hundred packages after dependency resolution; installed and compressed sizes are whatever the build script's closing `du -sh` prints). Three groups:
+
+- **Base and everyday CLI**: `base`, `curl`, `ca-certificates` (declared explicitly; the build asserts that the root certificate store exists and holds a sane number of certificates), `git`, `wget`, `nano`, `less`, `man-db`, `man-pages`, `bash-completion`, `unzip`, `zip`, `which`, `rsync`, `dnsutils`, `jq`, `fastfetch`, `openssh`, `sudo`, `btrfs-progs`, `archlinux-keyring`, `linxira-keyring`.
+- **First-party toolchain and brand assets**: `linxira-components`, `linxira-component-manager`, `linxira-config` (Config Hub), `linxira-recovery-diagnostics`, `linxira-update`, `linxira-wiki`, `linxira-catalog`, `linxira-completion-agent`, `linxira-crash-watch`, `linxira-hooks`, `linxira-gaming-manager`, `linxira-hardware-driver-manager`, `linxira-package-center`, `linxira-welcome`, `linxira-artwork`.
+- **Deliberately absent**: kernel, firmware and bootloader; NetworkManager; the Zeta binary package; any Node runtime; any desktop session.
+
+`linxira-update` depends on Qt6 (`python-pyqt6`, `qt6-svg`), so its window can display directly under Win11 + WSLg.
+
+## Network
+
+The image ships **no** DNS, proxy or hosts overrides: `/etc/hosts` and `/etc/resolv.conf` are generated by WSL, and resolution is delegated to the Windows side. "Some sites do not open" on mainland networks is usually a host-side cause. The most common one is an accelerator such as Steam++ / Watt Toolkit writing domains into the Windows `hosts` file pointing at `127.0.0.1`; WSL2 receives those addresses through the Windows resolver, and inside WSL `127.0.0.1` is the WSL VM itself, so the connection is refused. This is **not** a certificate problem — the image's root store matches Arch's.
+
+To make an accelerator or proxy work inside WSL, pick one:
+
+- **Mirrored networking** (recommended, Win11 22H2+): add `[wsl2]` / `networkingMode=mirrored` to `%UserProfile%\.wslconfig`, then `wsl --shutdown`;
+- **Explicit proxy**: `export HTTPS_PROXY=http://<Windows host IP>:<port>` (for NAT mode the host IP is the nameserver in `/etc/resolv.conf`), or put it in your shell startup file.
+
+## Privileges
+
+- The default user is **root**, and the image ships `sudo`. That matches official WSL distributions but also means there is no privilege separation by default. To use a normal account, create one and change `default` in `/etc/wsl.conf`.
+- Installing packages with pacman and running component transactions need root; `linxira-config workspace-guard enable` needs root.
+- Read-only queries (`linxira-config status`, `linxira-crash status`, `linxira-config workspace-guard status`) need no root.
+
+## Known limitations
+
+- No desktop session; graphical tools display only under Win11 + WSLg, and on Win10 they are CLI-only.
+- An idle WSL VM is shut down by Windows, and systemd timers only fire while it runs; the workspace guard is therefore off by default and its snapshot semantics are weaker than on the desktop.
+- The image is **still in development**; the repository rules forbid calling test artifacts a release. The release path is GitHub Releases (`linxira-wsl-<YYYY.MM.DD>-x86_64.tar.gz` plus `.sha256`).
+- Not published with the ISO and not part of the desktop ISO build chain.
+- No DNS/proxy/hosts overrides; check the host side first when networking fails.
+- Root by default with no pre-created normal user; multi-user isolation is your configuration to make.
 
 ## Building
 
-Repository: [`linxira-wsl`](https://github.com/Linxira-OS/linxira-wsl). Run `./build-wsl-rootfs.sh` in an Arch environment; the output is a tar.gz plus a sha256, published through GitHub Releases.
+On Arch (or in an Arch container):
 
-The build script deliberately avoids `/tmp` (tmpfs is RAM): a measured incident — packing the rootfs filled a 2 GB tmpfs and a parallel ISO build on the same machine was OOM-killed.
+```bash
+sudo pacman -S --needed arch-install-scripts
+./build-wsl-rootfs.sh
+LINXIRA_MIRROR=https://mirrors.aliyun.com/archlinux ./build-wsl-rootfs.sh
+```
+
+- **Build on ext4**: never build against `/mnt/c` or `/mnt/f` (9p/drvfs) — character and block device nodes cannot be created there, and the whole pacstrap/chroot/tar chain is an order of magnitude slower. The script probes with `findmnt` and exits 65 on 9p/drvfs; `LINXIRA_ALLOW_DRVFS=1` is for troubleshooting only.
+- **Avoid `/tmp`** (tmpfs is RAM): a measured incident — packing the rootfs filled a 2 GB tmpfs and a parallel ISO build on the same machine was OOM-killed.
+- During the build the `[linxira]` repository uses `SigLevel = Never`, only to break the bootstrap problem that the keyring itself ships inside the packages; the final `/etc/pacman.conf` written into the image uses exactly the same signature-verification configuration as the ISO install.
+- Before publishing, run the read-only gate:
+
+```bash
+./verify-wsl-rootfs.sh out/linxira-wsl-<YYYY.MM.DD>-x86_64.tar.gz
+```
+
+It checks licences, brand assets, the fastfetch identity, catalog component entries, the crash-watch service and `diagnose-crash` skill, Linxira package versions, `/usr/share/licenses/<pkg>/` for every first-party package, and the root certificate count; any failure exits non-zero.
+
+## Further design
+
+Repository and build notes are in the [`linxira-wsl`](https://github.com/Linxira-OS/linxira-wsl) `README.md`; the package manifest and build constraints are `wsl-packages.x86_64` and `AGENTS.md` in the same repository.

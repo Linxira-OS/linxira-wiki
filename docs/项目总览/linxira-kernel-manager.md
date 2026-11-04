@@ -25,7 +25,19 @@
 
 - 不写 GRUB、不生成 initramfs、不安装或删除包、不改服务。
 - 不支持自定义内核或第三方内核包。
-- 不实现提权与事务后端；Apply 按钮固定不可用。
+- 不实现提权与事务后端；Apply 按钮固定不可用。内核包与驱动计划的交界在
+  [硬件与驱动管理器](linxira-hardware-driver-manager.md)。
+
+## 责任链：谁读、谁规划、谁改动
+
+| 步骤 | 执行者 | 是否改动系统 |
+|---|---|---|
+| 采集内核与引导状态 | 本管理器 | 只读 |
+| 状态 → 固定操作计划 | 本管理器 | 只读；计划只写用户状态目录 |
+| 安装内核 / 重建 initramfs / 写 GRUB | 目前没有执行者 | 未实现 |
+
+第三行是本页最需要看清的事实：计划里的命令只是展示文本，**当前没有任何组件会执行它们**。
+将来若接入执行能力，提权也只应走 [Components](linxira-components.md) 的 Polkit 路径。
 
 ## 怎么用
 
@@ -39,10 +51,13 @@ linxira-kernel-manager
 
 | 页签 | 内容 |
 |---|---|
-| Overview | 运行内核、下次启动的内核、重启状态、warnings / blockers |
+| Overview | 运行内核 release、生效的下次启动内核、重启状态、warnings / blockers |
 | Kernels | `linux` 与 `linux-lts` 的版本、release、headers、镜像数量；DKMS 逐内核记录 |
 | Boot | 受支持的 GRUB 条目、normal / fallback / 内核镜像证据 |
 | Activity / report | 选择固定操作、审阅完整计划、`Save plan`（Apply 不可用） |
+
+在 Activity / report 页勾选 `I reviewed this exact plan` 才能保存计划；`Apply` 按钮
+始终禁用，提示为 `Apply backend is not ready`。
 
 ### 命令行
 
@@ -54,23 +69,24 @@ linxira-kernel-manager --plan org.linxira.kernel.regenerate-initramfs.v1
 linxira-kernel-manager --plan org.linxira.bootloader.refresh-grub.v1
 ```
 
-`--plan` 打印 `{path, plan}`：计划原子写入 home 目录（用户主目录）下的
-`~/.local/state/linxira/kernel-manager/plans/`（`XDG_STATE_HOME` 未设置时）。
-计划可应用时退出码为 0，否则为 3。
+`--plan` 打印 `{path, plan}`：计划原子写入
+`$XDG_STATE_HOME/linxira/kernel-manager/plans/`（未设置时是
+`~/.local/state/...`），文件名取自计划自身的 SHA-256。计划可应用时退出码为 0，
+否则为 3——包括「已经无需变更」的情况。
 
 | 操作 ID | 计划里展示的预期命令 |
 |---|---|
-| `org.linxira.kernel.ensure-standard.v1` | `pacman -S --needed linux linux-headers linux-lts linux-lts-headers` |
-| `org.linxira.kernel.boot-lts-once.v1` | 对唯一一个可识别的 `linux-lts` GRUB 条目执行 `grub-reboot` |
-| `org.linxira.kernel.regenerate-initramfs.v1` | `mkinitcpio -P` |
-| `org.linxira.bootloader.refresh-grub.v1` | `grub-mkconfig -o /boot/grub/grub.cfg` |
+| `org.linxira.kernel.ensure-standard.v1` | `/usr/bin/pacman -S --needed linux linux-headers linux-lts linux-lts-headers` |
+| `org.linxira.kernel.boot-lts-once.v1` | `/usr/bin/grub-reboot <detected-linux-lts-entry-id>` |
+| `org.linxira.kernel.regenerate-initramfs.v1` | `/usr/bin/mkinitcpio -P` |
+| `org.linxira.bootloader.refresh-grub.v1` | `/usr/bin/grub-mkconfig -o /boot/grub/grub.cfg` |
 
-这些命令是**展示文本**（`displayOnly: true`），不是执行凭据。
+这些命令是**展示文本**（`expected.displayOnly = true`），不是执行凭据。
 
 ## 事务边界
 
 - 计划里 `apply` 固定为 `{"implemented": false, "result": "backend-not-ready"}`；
-  界面上的 Apply 按钮始终禁用。
+  界面上的 Apply 按钮始终禁用，系统事务服务里也没有对应的内核/bootloader 操作。
 - 计划有源报告摘要（`sourceReportSha256`）与自身摘要（`planSha256`）；前置条件包括
   固定支持矩阵、包状态可读、目标内核是否安装、GRUB 条目是否唯一等。
 - `boot-lts-once` 要求恰好存在一个带安全 ID 的 `linux-lts` GRUB 条目；不唯一就阻塞，
@@ -88,11 +104,14 @@ linxira-kernel-manager --plan org.linxira.bootloader.refresh-grub.v1
 - 支持矩阵只有 `linux`、`linux-lts`、`linux-headers`、`linux-lts-headers`；自定义内核显式不支持。
 - 只解析固定的 `/boot/grub/grub.cfg` 与 `grub-editenv list`；其他引导器不在范围内。
 - GRUB 条目只在能解析出受支持内核镜像时保留；解析失败只会让计划阻塞，不会写入。
-- 计划按 `0600` 保存，目录逐级拒绝符号链接。
+- 已安装状态只来自固定证据：`/usr/bin/uname -r`、`/usr/lib/modules`、`pacman -Q`、
+  `dkms status`、`/boot`、`/proc/cmdline`、`/proc/modules` 与 `/run/reboot-required`；
+  子进程都是固定参数、`shell=False`、8 秒超时。
+- 计划目录逐级拒绝符号链接，文件权限为 `0600`。
 
 ## 深入设计
 
-实现见
-[`linxira-kernel-manager`](https://github.com/Linxira-OS/linxira-kernel-manager)
-仓库；内核与驱动的交界见
+当前行为与边界见
+[`linxira-kernel-manager` README](https://github.com/Linxira-OS/linxira-kernel-manager/blob/main/README.md)，
+维护者约定见仓库的 `AGENTS.md`；内核与驱动的交界见
 [硬件与驱动管理器](linxira-hardware-driver-manager.md)。

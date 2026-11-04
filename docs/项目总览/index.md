@@ -22,9 +22,9 @@
 | 硬件与内核 | [HWD Detector](linxira-hwd-detector.md)、[Hardware Driver Manager](linxira-hardware-driver-manager.md)、[Kernel Manager](linxira-kernel-manager.md) |
 | 数据与签名 | [Catalog](linxira-catalog.md)、[Keyring](linxira-keyring.md) |
 | 平台与 Agent | [WSL 发行版](linxira-wsl.md)、[Agent 工作区](agent-workspace.md)、[Agent 技能](agent-skills.md) |
-| 占位 | [Zeta](linxira-zeta.md)、[Bio SDK](linxira-bio-sdk.md)（建设中，不完整；只保留入口） |
+| 外部产品 | [Zeta](linxira-zeta.md)、[Bio SDK](linxira-bio-sdk.md)（文档以各自仓库为准，本 wiki 只保留入口页） |
 
-构建/发布仓库（`packages`、`linxira-packages`、`linxira-iso-direct`）与品牌资产不是终端用户软件，不单列使用页；品牌资产见 [品牌系统](../Linxira%20特性/branding.md)。Zeta 与 Bio SDK 目前只保留占位页，不写未落地的用法。
+构建/发布仓库（`packages`、`linxira-packages`、`linxira-iso-direct`）与品牌资产不是终端用户软件，不单列使用页；品牌资产见 [品牌系统](../Linxira%20特性/branding.md)。Zeta 与 Bio SDK 属外部产品，本 wiki 只保留入口页并指向其仓库与 GitHub Wiki 里的权威文档，不在此复制它们的安装与用法。
 
 ## 全表
 

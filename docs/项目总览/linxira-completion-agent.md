@@ -17,10 +17,17 @@
 **不归它**：
 
 - **不做安装决策**。哪些条目能装、走哪个来源、是否需要接受许可，来自 catalog 与回执。
-- **不发包事务**。真正执行时同样经过 [`linxira-components`](linxira-components.md)
-  的 `plan → confirm → apply`，提权由 `pkexec` 完成。
+- **不发包事务**。安装不由它执行，而是交给
+  [`linxira-components`](linxira-components.md)。
 - **不处理安装器该做的事**。经过审核的官方 Arch 应用与组件必须在首次启动前就装进
   Calamares 目标环境；回执如果错误地把这类条目交给 Completion，程序会直接拒绝。
+
+**委托出去的事务**：需要执行时，它把回执里的条目写成选择文档交给
+[`linxira-components`](linxira-components.md) 的 `plan → confirm → apply` 链，
+`apply` 通过 `pkexec` 提权；回执由后端写在 `/var/lib/linxira/components/receipts`。
+
+**代理自身不提权**：它以普通用户运行，只读 catalog 与安装回执，只写自己的状态文件，
+不调用 `sudo`、不执行 pacman、不写后端回执。
 
 ## 怎么用
 
@@ -45,7 +52,7 @@ linxira-completion-agent --autostart # 首次登录自启动条目使用的形�
 catalog 在回执写入后发生变化、或各项分类互相矛盾时，程序打印原因并以状态码 2 退出。
 
 运行状态写在 `${XDG_STATE_HOME:-$HOME/.local/state}/linxira/completion/state.json`
-（`$HOME` 即 home 目录（用户主目录）），其中包含 catalog 与回执的 SHA-256。`--autostart` 启动时，如果上一次的状态是
+（`$HOME` 指用户主目录），其中包含 catalog 与回执的 SHA-256。用 `--autostart` 启动时，如果上一次的状态是
 `complete` 或 `deferred`，程序直接退出；已经成功的条目也不会再次出现。
 
 ## 何时需要 root

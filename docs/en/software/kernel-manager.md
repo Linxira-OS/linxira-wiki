@@ -26,7 +26,20 @@ into reviewable plans. It is a reporting and planning tool, not a bootloader wri
 
 - Writing GRUB, generating initramfs, installing or removing packages, or changing services.
 - Custom or third-party kernels.
-- Privilege escalation or the transaction backend. Apply is permanently disabled.
+- Privilege escalation or the transaction backend. Apply is permanently disabled. The
+  driver-side boundary is in [Hardware and Driver Manager](hardware-driver-manager.md).
+
+## Chain of responsibility: who reads, who plans, who changes
+
+| Step | Performer | Changes the system? |
+|---|---|---|
+| Collect kernel and boot state | This manager | Read-only |
+| State → fixed-operation plan | This manager | Read-only; plans go to the user state directory |
+| Install kernels / regenerate initramfs / write GRUB | Nobody today | Not implemented |
+
+That third row is the load-bearing fact: the commands in a plan are display text, and **no
+component currently executes them**. If an execution path is added later, authorisation
+should still go through [Components](components.md) and Polkit.
 
 ## How to use
 
@@ -40,10 +53,13 @@ linxira-kernel-manager
 
 | Tab | Contents |
 |---|---|
-| Overview | Running kernel, effective next boot, reboot state, warnings/blockers |
+| Overview | Running kernel release, effective next boot, reboot state, warnings/blockers |
 | Kernels | `linux` and `linux-lts` versions, releases, headers, image counts; per-kernel DKMS records |
 | Boot | Supported GRUB entries; normal, fallback and kernel-image evidence |
 | Activity / report | Pick a fixed operation, review the full plan, `Save plan` (Apply disabled) |
+
+In Activity / report, `I reviewed this exact plan` must be checked before `Save plan` is
+enabled. The `Apply` button is always disabled with the tooltip `Apply backend is not ready`.
 
 ### Command line
 
@@ -55,23 +71,25 @@ linxira-kernel-manager --plan org.linxira.kernel.regenerate-initramfs.v1
 linxira-kernel-manager --plan org.linxira.bootloader.refresh-grub.v1
 ```
 
-`--plan` prints `{path, plan}` and writes the plan atomically under the home directory at
-`~/.local/state/linxira/kernel-manager/plans/` (when `XDG_STATE_HOME` is unset). Exit
-status is 0 when applicable and 3 otherwise.
+`--plan` prints `{path, plan}` and writes the plan atomically under
+`$XDG_STATE_HOME/linxira/kernel-manager/plans/` (`~/.local/state/...` when unset), named
+after the plan's own SHA-256. Exit status is 0 when the plan is applicable and 3 otherwise,
+including when no change is needed.
 
 | Operation ID | Expected command shown in the plan |
 |---|---|
-| `org.linxira.kernel.ensure-standard.v1` | `pacman -S --needed linux linux-headers linux-lts linux-lts-headers` |
-| `org.linxira.kernel.boot-lts-once.v1` | `grub-reboot` on the single identifiable `linux-lts` entry |
-| `org.linxira.kernel.regenerate-initramfs.v1` | `mkinitcpio -P` |
-| `org.linxira.bootloader.refresh-grub.v1` | `grub-mkconfig -o /boot/grub/grub.cfg` |
+| `org.linxira.kernel.ensure-standard.v1` | `/usr/bin/pacman -S --needed linux linux-headers linux-lts linux-lts-headers` |
+| `org.linxira.kernel.boot-lts-once.v1` | `/usr/bin/grub-reboot <detected-linux-lts-entry-id>` |
+| `org.linxira.kernel.regenerate-initramfs.v1` | `/usr/bin/mkinitcpio -P` |
+| `org.linxira.bootloader.refresh-grub.v1` | `/usr/bin/grub-mkconfig -o /boot/grub/grub.cfg` |
 
-Those commands are **display text** (`displayOnly: true`), not execution tokens.
+Those commands are **display text** (`expected.displayOnly = true`), not execution tokens.
 
 ## Transaction boundary
 
 - The plan's `apply` field is always
-  `{"implemented": false, "result": "backend-not-ready"}`; the Apply button stays disabled.
+  `{"implemented": false, "result": "backend-not-ready"}`; the Apply button stays disabled,
+  and the system transaction service exposes no kernel or bootloader operation.
 - Each plan carries `sourceReportSha256` and `planSha256`. Preconditions cover the fixed
   support matrix, readable package state, whether the target kernel is installed, and
   whether a GRUB entry is unambiguous.
@@ -95,11 +113,15 @@ authorisation should go through [Components](components.md) and Polkit.
   bootloaders are out of scope.
 - A GRUB entry is kept only when a supported kernel image can be parsed. Parse failures
   block a plan; they never cause a write.
-- Plans are saved as `0600`, and the directory chain rejects symlinks.
+- Installed state comes only from fixed evidence: `/usr/bin/uname -r`, `/usr/lib/modules`,
+  `pacman -Q`, `dkms status`, `/boot`, `/proc/cmdline`, `/proc/modules` and
+  `/run/reboot-required`; subprocesses use fixed arguments, `shell=False` and an 8-second
+  timeout.
+- The plan directory chain rejects symlinks and files use `0600` permissions.
 
 ## Design notes
 
-See
-[`linxira-kernel-manager`](https://github.com/Linxira-OS/linxira-kernel-manager).
-The driver-side boundary is in
+Current behaviour and boundaries are in the
+[`linxira-kernel-manager` README](https://github.com/Linxira-OS/linxira-kernel-manager/blob/main/README.md),
+maintainer conventions in `AGENTS.md`. The driver-side boundary is in
 [Hardware and Driver Manager](hardware-driver-manager.md).

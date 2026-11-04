@@ -28,6 +28,17 @@ metadata and selection previews, and the plan display before confirmation.
 - **Removal.** Phase 1 installs ready package targets only.
 - **Metadata.** Bundles, roles and selection policies come from the catalog.
 
+**The delegated transaction** is the same chain for all three entry points and
+belongs to [Components](components.md): write the selection document and run `plan`,
+show the immutable `request-plan.json`, run
+`confirm --catalog ... --plan ... --output-dir ...` after confirmation, and, when
+`directPackageTargets` is non-empty, run `pkexec apply --confirmation ...`. Receipts
+are written by the backend under `/var/lib/linxira/components/receipts`.
+
+**No entry point escalates by itself**: the GUI, the TUI and the CLI never call
+`sudo`, never run pacman, never write receipts and never expand component IDs into
+package names. Elevation can only come from `pkexec`, and only for `apply`.
+
 ## How to use
 
 ### Graphical interface
@@ -55,7 +66,7 @@ plan. **Plan with linxira-components** performs a fixed flow:
    pending/unsupported summaries.
 4. After your confirmation, run `linxira-components confirm` against that exact plan.
 5. If `directPackageTargets` is non-empty, run
-   `pkexec linxira-components apply --catalog ... --confirmation ...`.
+   `pkexec linxira-components apply --confirmation ...`.
 
 A plan with no direct package targets (only pending or unsupported leaves) is confirmed
 without requesting `pkexec`. Pending and unsupported leaves are never applied.
@@ -91,14 +102,17 @@ linxira-component-manager --catalog ./catalog-v3.json install component-fish
   planned package targets, `--yes` skips the interactive prompt (for agents), and
   `--json` emits machine-readable output. Pending items that cannot be installed are
   reported and skipped.
-- Exit codes: `0` success, `2` selection or plan rejected, `3` authorization or apply
-  failure, `64` usage error.
+- Exit codes: `0` success, `2` selection or plan rejected (this includes an unusable
+  catalog), `3` authorization or apply failure, `64` no subcommand given (help is
+  printed).
 
 ## When root is needed
 
 The default authorization mode is `auto`: **as root, apply runs directly; as a normal
 user, `pkexec` asks Polkit for authorization.** Planning and confirmation never
-elevate. Do not wrap the commands in `sudo`, and do not start the GUI as root.
+elevate. Do not wrap the commands in `sudo` and do not start the GUI as root — that
+bypasses the Polkit prompt; the only elevation path this project defines is
+`linxira-components` through Polkit.
 
 ## Known limitations
 

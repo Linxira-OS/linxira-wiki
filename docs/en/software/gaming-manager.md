@@ -30,15 +30,26 @@ starting and recording restic backups.
   the contents.
 - **System configuration.** Drivers, kernels and services belong to their own tools.
 
+**The delegated transaction** exists only for the gaming environment deployment. It
+requests the catalog's `bundle-gaming-setup` (`plan --bundle bundle-gaming-setup
+--accept-license steam`), shows the immutable plan, calls `confirm` after your
+confirmation, and then `pkexec linxira-components apply --confirmation ...` performs
+the privileged step. Planning, confirmation, privileged execution and receipts all
+belong to [Components](components.md).
+
+**The program never escalates by itself**: it refuses to run as root, does not call
+`sudo`, does not run pacman and does not write backend receipts. Scans, imports,
+launches and backups all run as the current user.
+
 ## How to use
 
 ```bash
 linxira-gaming-manager
 ```
 
-There are no command-line arguments; the menu entry runs
-`/usr/bin/linxira-gaming-manager`. It **must run as a normal user** — started as root it
-prints an error and exits with status 1.
+There are no command-line arguments; the menu entry runs `linxira-gaming-manager`.
+It **must run as a normal user** — started as root it prints an error and exits with
+status 1.
 
 Environment variables:
 

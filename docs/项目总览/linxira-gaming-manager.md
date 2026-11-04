@@ -25,14 +25,23 @@
 - **不保存备份密码**。它只把密码文件路径交给 restic，密码内容从不写入自己的状态。
 - **不改系统级配置**。驱动、内核与系统服务在各自的工具里。
 
+**委托出去的事务**：只有游戏环境部署会发包事务。它请求 catalog 的
+`bundle-gaming-setup`（`plan --bundle bundle-gaming-setup --accept-license steam`），
+展示不可变计划，确认后调用 `confirm`，再由 `pkexec linxira-components apply
+--confirmation ...` 提权执行；计划、确认、特权执行与回执都归
+[`linxira-components`](linxira-components.md)。
+
+**程序自身不提权**：它拒绝以 root 运行，不调用 `sudo`、不执行 pacman、不写后端回执。
+扫描、导入、启动与备份都以当前用户身份完成。
+
 ## 怎么用
 
 ```bash
 linxira-gaming-manager
 ```
 
-没有命令行参数，应用菜单里的「Linxira Gaming Manager」执行的就是
-`/usr/bin/linxira-gaming-manager`。**必须以普通用户运行**——以 root 启动时程序
+没有命令行参数；应用菜单里的「Linxira Gaming Manager」执行的命令就是
+`linxira-gaming-manager`。**必须以普通用户运行**——以 root 启动时程序
 打印错误并以状态码 1 退出。
 
 可用环境变量：
@@ -46,12 +55,12 @@ linxira-gaming-manager
 
 ### 库（Library）
 
-- **刷新**会扫描每个 Steam 根的 `steamapps/libraryfolders.vdf` 及其
+- **Refresh**（刷新）会扫描每个 Steam 根的 `steamapps/libraryfolders.vdf` 及其
   `appmanifest_*.acf`，把找到的游戏写入本地库；重复扫描不会产生重复条目。
-- **导入游戏**只接受 `.exe`，然后选择兼容运行器：**UMU-Proton（推荐）**
-  或 **System Wine**。导入时按游戏 ID 生成独立 prefix，位置在
+- **Import game**（导入游戏）只接受 `.exe`，然后选择兼容运行器：**UMU-Proton
+  (recommended)** 或 **System Wine**。导入时按游戏 ID 生成独立 prefix，位置在
   `${XDG_DATA_HOME:-$HOME/.local/share}/linxira/gaming-manager/games/<id>/prefix`。
-- **启动**单个游戏：Steam 游戏调用 `/usr/bin/steam steam://rungameid/<appid>`；
+- 启动单个游戏：Steam 游戏调用 `/usr/bin/steam steam://rungameid/<appid>`；
   导入游戏调用 `/usr/bin/umu-run` 或 `/usr/bin/wine`，工作目录为可执行文件所在
   目录，`WINEPREFIX` 指向托管 prefix，环境变量只传递固定白名单。启动输出合并后
   写入 `${XDG_STATE_HOME:-$HOME/.local/state}/linxira/gaming-manager/games/<id>/logs/<时间戳>.log`，

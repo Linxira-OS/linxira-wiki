@@ -24,6 +24,16 @@
 - **移除不归它**。Phase 1 只安装；共享后端还没有归属台账、依赖归因与漂移检测之前，
   没有包移除入口。
 
+**委托出去的事务**：一次安装就是 `linxira-components` 的
+`plan → confirm → apply` 链。界面先写 `org.linxira.component-selection.v1`
+选择文档并调用 `plan`，拿到计划后调用 `confirm`，最后以 `pkexec` 调用 `apply`。
+计划、确认、特权执行与回执（后端写在 `/var/lib/linxira/components/receipts`）
+全部归 `linxira-components`。
+
+**界面自身不提权**：它不调用 `sudo`，不自己执行 pacman，不写回执，也不复制后端的
+校验逻辑；提权只发生在 `pkexec linxira-components apply --confirmation ...`
+这一步。
+
 ## 怎么用
 
 ```bash

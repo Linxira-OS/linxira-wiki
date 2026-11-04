@@ -30,6 +30,17 @@ presentation, and the continuation prompt for software deferred during installat
 - **Removal.** Phase 1 installs only. There is no removal entry point until the shared
   backend has an ownership ledger, dependency attribution and drift detection.
 
+**The delegated transaction** is the `linxira-components` chain
+`plan → confirm → apply`. The UI writes an `org.linxira.component-selection.v1`
+selection document and calls `plan`, calls `confirm` on the resulting plan, and
+finally runs `apply` through `pkexec`. Planning, confirmation, privileged execution and
+the receipts written under `/var/lib/linxira/components/receipts` all belong to
+`linxira-components`.
+
+**The UI never escalates by itself**: it does not call `sudo`, does not run pacman,
+does not write receipts and does not duplicate backend validation. Elevation happens
+only in `pkexec linxira-components apply --confirmation ...`.
+
 ## How to use
 
 ```bash
@@ -50,19 +61,20 @@ fixed at `/usr/bin/pkexec`.
 
 The flow:
 
-1. Pick a view in the **Display** filter: reviewed and installable, included in the
-   image (offline), requires network, installed, or third-party review channel
-   (view-only, opt-in).
+1. Pick a view in the **Display** filter (the UI labels are Chinese:
+   **显示**): reviewed and installable, included in the image (offline), requires
+   network, installed, or third-party review channel (view-only, opt-in).
 2. Expand a category and tick applications. Categories use `multi`, `exclusive`
    (at most one) or `bounded` (`maxSelected`) selection; a partial checkbox means only
    some children are selected. Installed items are locked selected leaves: they cannot
    be cleared and are never submitted as removals.
-3. Click **Install selected software**. If the selection contains proprietary software
-   that requires acceptance, a confirmation dialog appears first and the acceptance is
-   recorded in the plan.
+3. Click **安装所选软件** (Install selected software). If the selection contains
+   proprietary software that requires acceptance, a confirmation dialog appears first
+   and the acceptance is recorded in the plan.
 4. The UI writes an `org.linxira.component-selection.v1` document (bound to the
    catalog SHA-256 and release) and calls `linxira-components plan`, then shows the
-   immutable `request-plan.json` in a **Confirm installation plan** dialog.
+   immutable `request-plan.json` in a **确认安装计划** (Confirm installation plan)
+   dialog.
 5. After you confirm, it runs `linxira-components confirm` and then
    `pkexec linxira-components apply --confirmation ...`, reporting progress in the
    status bar. Cancellation or failure removes the temporary transaction directory.

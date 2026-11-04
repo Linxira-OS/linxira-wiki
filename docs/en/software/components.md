@@ -8,7 +8,7 @@ Any action in the system that changes the machine needs one uniform shape: compu
 
 ## Scope
 
-**It owns**: catalog reading, target selection, plan generation (`plan`), plan confirmation (`confirm`), execution as root (`apply`), receipt output, inventory and installed-state queries, the Timeshift-style snapshot backend, and executing workspace-guard snapshots and restores.
+**It owns**: catalog reading, target selection, plan generation (`plan`), plan confirmation (`confirm`), execution as root (`apply`), receipt output, inventory and installed-state queries, and executing workspace-guard snapshots and restores.
 
 **It does not own**:
 
@@ -18,40 +18,54 @@ Any action in the system that changes the machine needs one uniform shape: compu
 
 ## Usage
 
-Three steps, and the output of each one is a file a human can read before handing it to the next:
+Day-to-day installation starts in the Quick System Software Setup or Quick System Runtime
+Setup UI; below is the CLI entry to the same transaction chain. Three steps, and the
+output of each one is a file a human can read before handing it to the next:
 
 ```bash
-# 1. plan
-linxira-components list --catalog /usr/share/linxira/catalog/catalog-v3.json --json
+# 1. plan: an installed system ships only catalog-v3.json, which accepts a selection or a fixed bundle
 linxira-components plan --catalog /usr/share/linxira/catalog/catalog-v3.json \
-    --profile workstation --output-dir ./out
+    --bundle bundle-python-runtime --output-dir ./out
 
 # 2. confirm (confirms a plan that has not changed)
 linxira-components confirm --catalog /usr/share/linxira/catalog/catalog-v3.json \
     --plan ./out/request-plan.json --output-dir ./out
 
-# 3. apply (needs root and authorisation)
-linxira-components apply --confirmation ./out/confirmation.json
+# 3. apply (needs root and authorisation; the GUIs use pkexec, sudo is equivalent in a terminal)
+sudo linxira-components apply --confirmation ./out/confirmation.json
 ```
+
+`--profile` and `--application` are the Catalog v2 compatibility entry points and only work with a v2 catalog file. An installed system ships only `catalog-v3.json`, so day-to-day installation has Package Center or Component Manager write an `org.linxira.component-selection.v1` selection document and pass it to `--selection`.
 
 The workspace guard is another set of actions under the same shape:
 
 ```bash
-linxira-components guard status                                  # read-only, no authorisation
-linxira-components guard register ~/Linxira-OS                  # root only; writes the guard registry
-linxira-components guard snapshot ~/Linxira-OS                  # Polkit prompt
-linxira-components guard restore <id> --target ~/ws-restored     # Polkit prompt
+linxira-components-guard status                                 # read-only, no authorisation
+linxira-components-guard status --json                          # same state, one line of JSON
+linxira-components-guard register ~/Linxira-OS                  # root only; writes the guard registry
+linxira-components-guard snapshot ~/Linxira-OS                  # Polkit prompt
+linxira-components-guard restore <id> --target ~/ws-restored     # Polkit prompt
 ```
 
 See [Workspace Guard](workspace-guard.md) for details.
 
 ## When root is required
 
-- **Not required**: `list`, `inventory`, `plan`, `confirm`. Plans and confirmations are pure computation.
-- **Required**: `apply`, and the guard actions `init` / `register` / `unregister` / `snapshot` / `restore`. The guard snapshot and restore go over D-Bus and Polkit asks the user for authorisation, so the agent does not need to hold sudo itself. `guard init` / `register` / `unregister` edit a root-owned registry and must be run as administrator.
+- **Not required**: `list`, `inventory`, `plan`, `confirm`, and `linxira-components-guard status` / `linxira-components-guard list`. Plans and confirmations are pure computation, and the guard's read-only queries report an unconfigured guard instead of asking for authorisation.
+- **Root required**: `apply`, plus `linxira-components-guard init|register|unregister`. GUIs call `apply` through `pkexec linxira-components apply`; `sudo` is equivalent in a terminal.
+- **Polkit authorisation**: `linxira-components-guard snapshot|restore` go through a system D-Bus plan and confirmation, where Polkit authenticates an administrator. An agent may start them without holding sudo itself.
 
 A drift check sits between the plan file and the apply: if the system state changed between the two steps, that plan is void. This is deliberate — the plan shows the user the system as it was, not as it is now.
 
+## Known limitations
+
+- Only currently available `pacman` leaves from the `arch` source become package targets. AUR, Conda, operation and unavailable leaves are recorded as pending or unsupported and never executed.
+- `apply` never performs a system upgrade, never removes packages and accepts no arbitrary pacman arguments; `systemUpgradeRequired` is always `false`.
+- Any drift between confirmation and apply — catalog bytes, plan contents or the final leaf set — voids the plan. That is protection, not a stale cache.
+- Plans and confirmations must be written into an existing directory under a plain filename; symlinked directories are refused.
+- A package's own install scripts and hooks still run inside the Arch package trust boundary; this project does not rewrite them.
+- The guard `snapshot` / `restore` actions require the store created by `linxira-config workspace-guard enable`; without it they report "not configured" and stop.
+
 ## Deeper design
 
-[Direct Arch architecture](../features/architecture.md) · internals are in the `document/` directory of the [`linxira-components`](https://github.com/Linxira-OS/linxira-components) repository.
+[Direct Arch architecture](../features/architecture.md) · transaction design and the trust boundary are in [`docs/TRANSACTION_BACKEND.md`](https://github.com/Linxira-OS/linxira-components/blob/main/docs/TRANSACTION_BACKEND.md) in the [`linxira-components`](https://github.com/Linxira-OS/linxira-components) repository.

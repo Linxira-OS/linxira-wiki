@@ -51,7 +51,8 @@ The five pages:
   Component Manager respectively. Below that is the launcher grid: Software Center
   (Shelly), Quick System Software Setup, Quick System Runtime Setup, Config CLI in a
   terminal, System Settings and Terminal; an installed system also gets System Update,
-  Gaming Manager, Hardware and Drivers and Recovery Diagnostics.
+  Gaming Manager, Hardware and Drivers and Recovery Diagnostics, plus a driver
+  quick-setup banner that also opens Hardware and Drivers.
 - **Status.** Release, kernel, network, catalog availability and review, installer
   receipt status, available updates, last check, reboot flag, and the profiles and
   applications chosen during installation.
@@ -74,19 +75,31 @@ persisted; unsupported locales fall back to English.
 ## When root is needed
 
 **Never.** Welcome has no elevation path: launchers use fixed executables and fixed
-argument vectors, Config CLI is opened in the session's terminal (Konsole on KDE,
-`cosmic-term` on COSMIC), and the Terminal page leaves `chsh` for you to run.
+argument vectors, Config CLI is opened in the session's terminal (KDE runs
+`konsole --hold -e`; on COSMIC the terminal starts with `SHELL` pointing at
+`linxira-config`, which works on cosmic-term 1.10 and 1.11), and the System page
+entries, which carry arguments, use `cosmic-term -e` on COSMIC. The Terminal page
+copies `chsh` to the clipboard for you to run.
 Anything requiring root goes through the owning tool and its own authorization model.
+
+Launchers only start fixed programs: `linxira-update --launch` (System Update),
+`linxira-recovery-diagnostics-gui` (Recovery Diagnostics) and
+`/usr/local/bin/linxira-installer-shell` (Live install). A tile whose executable is
+missing is disabled.
 
 ## Known limitations
 
 - It is an entry and status surface, not a live monitor of the other tools.
 - The System page depends on `/usr/share/linxira/agent/capabilities.json` from
   `linxira-config-hub`; when it is missing the page is empty.
-- Terminal dispatch is session-aware: COSMIC uses `cosmic-term -e`, KDE uses
-  `konsole --hold -e`, and `alacritty`/`xterm` are fallbacks. The command is passed
-  to the terminal directly, avoiding the `Terminal=true`/`gtk-launch` relay that
-  COSMIC does not provide reliably.
+- Terminal dispatch is session-aware: COSMIC prefers `cosmic-term`, KDE prefers
+  `konsole --hold -e`, then `alacritty -e` and `xterm -hold -e`. A single command
+  (Config CLI) uses `SHELL` injection on COSMIC so it also works on cosmic-term
+  1.10; other commands use the terminal's exec flag. Only when no terminal is
+  usable does Welcome write a temporary `Terminal=true` entry for `gtk-launch`.
+- The System page shows only commands carrying `welcome` metadata; `mutating`
+  entries stay hidden unless the manifest opts in explicitly. A missing command
+  removes one tile rather than raising an error.
 - The Live ISO uses an ephemeral profile, so Welcome opens on every fresh Live boot and
   the login preference does not persist across boots.
 - Ten UI languages are shipped; everything else falls back to English.

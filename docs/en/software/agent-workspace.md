@@ -8,6 +8,37 @@ That split comes from evidence ownership: crash evidence belongs to Crash Watch,
 
 The workspace also stores sessions. Starting the interactive lane with `--session-dir <ws>/.zeta/sessions` puts the sessions inside the workspace too, so "what was asked, what was seen" and the evidence sit in the same tree and can be compared afterwards.
 
+## Responsibilities
+
+**It owns (the convention itself)**:
+
+- The rules that a workspace is split per subsystem, stores text only, and carries only its own subsystem's skills.
+- The split between evidence (batch directories, `INDEX.md`, `backlog.json`, `mute.json`) and tool state (`.agents/skills/`, `.zeta/sessions/`).
+
+**It does not own**:
+
+- Implementing a workspace. The only implementation today is
+  [Crash Watch](crash-watch.md), which creates the directory, writes `INDEX.md` and
+  materialises the `diagnose-crash` skill.
+- The agent's session format or recovery logic; `--cwd`, `--session-dir` and `.zeta/`
+  semantics belong to Zeta.
+- Snapshot or restore; that is [Workspace Guard](workspace-guard.md).
+- Installing project skill trees; that is `linxira-skills` in [Agent Skills](agent-skills.md).
+
+## How to use
+
+The component that creates the workspace provides it; users do not build the directory by hand:
+
+```bash
+linxira-crash status            # print workspace path, configuration and event counts
+linxira-crash investigate <id>  # launch zetacode inside the workspace (spends tokens)
+```
+
+The path is configured in `~/.config/linxira/crash-watch.toml` under `[workspace].path`
+and defaults to `~/Linxira/debug`. On first use the workspace is created as a git
+repository containing `INDEX.md`, `backlog.json`, `mute.json`, `batches/` and
+`.agents/skills/diagnose-crash/SKILL.md`.
+
 ## Current implementation
 
 There is currently **only one** implemented agent workspace: Crash Watch's `~/Linxira/debug` (the default; the configuration key is `[workspace].path`).
@@ -57,8 +88,37 @@ If one is added later, the following are **conventions and plans, not current be
 
 Until then, system and configuration work has no dedicated agent workspace; do not invent a path or reuse the crash workspace before the conventions on this page are implemented.
 
+## Privileges
+
+- The workspace lives under `$HOME` and is owned by the user; creating, writing and reading
+  it need no root.
+- Crash Watch itself is an unprivileged user service: no root, no network, no arbitrary shell.
+- The workspace is not a privileged landing place — do not put root-requiring configuration
+  changes into it, and do not treat it as an escalation path.
+
+## Known limitations
+
+- Only one subsystem implements a workspace (Crash Watch's debug workspace); the
+  system/configuration workspace still does not exist.
+- `.agents/skills/` and `.zeta/sessions/` are gitignored, so cloning or copying a workspace
+  brings neither skills nor sessions; skills can be re-materialised, sessions are not
+  archived with the evidence.
+- Text only: core dumps, binaries and large dumps never enter the workspace, only the
+  `dumpRef` pointing into systemd-coredump.
+- The workspace is not registered with the workspace guard, so it has no timed snapshots;
+  deleting it means losing the evidence.
+- The layout belongs to the implementation (`INDEX.md`, `backlog.json`, `mute.json`,
+  `batches/`). This page records the single current implementation, not a generic
+  directory contract any component may assume.
+
 ## Related
 
 - [Crash Watch](crash-watch.md) — the only subsystem that implements an agent workspace today
 - [Agent Skills](agent-skills.md) — skill scopes, the system skill location and the `linxira-skills` CLI
 - [Workspace Guard](workspace-guard.md) — snapshot and restore for user directories
+
+## Further design
+
+Workspace layout and triage rules are in
+[`linxira-crash-watch`](https://github.com/Linxira-OS/linxira-crash-watch)
+`document/crash-watch-design.md`; the entry point is the same repository's `README.md`.

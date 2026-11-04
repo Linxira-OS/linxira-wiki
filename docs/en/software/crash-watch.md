@@ -35,27 +35,68 @@ The workspace defaults to `~/Linxira/debug` and can be changed with the `[worksp
 | `mute.json` | Per-program mute rules |
 | `batches/` | Evidence files grouped by batch, one batch per crash event |
 | `.agents/skills/<name>/SKILL.md` | Skills shipped with the workspace, `gitignored` (tooling, not evidence) |
-| `.zeta/sessions/` | Agent session records, also outside the versioned evidence set |
+| `.zeta/sessions/` | Agent session records; not crash evidence, but not covered by `.gitignore` either |
 
-Ignoring `.agents/skills/` is deliberate: skills are tool configuration, not part of the record of "what happened in this crash".
+Ignoring `.agents/skills/` is deliberate: skills are tool configuration, not part of the record of "what happened in this crash". `.zeta/sessions/` is **not** in the ignore list today, so check before committing the workspace that you are not adding session transcripts. The first time the workspace is created it runs `git init` and fills in `INDEX.md`, `backlog.json`, `mute.json` and `.gitignore`.
+
+Configuration lives in `~/.config/linxira/crash-watch.toml`:
+
+```toml
+[workspace]
+path = "~/Linxira/debug"
+
+[triage]
+timeout          = "6h"
+repeat_threshold = 3
+
+[escalate]
+driver_related = true
+
+[lane.unattended]
+enabled  = false
+schedule = "04:00"
+tools    = "read,grep,glob,lsp"
+```
+
+## How to use
+
+Background capture is the `linxira-crash-watch.service` user service, enabled by its
+preset on first login; it runs `linxira-crash daemon --interval 60`. Day-to-day work
+is the same CLI:
+
+```bash
+linxira-crash status                    # workspace, timeout, unattended lane, event counts
+linxira-crash list --state pending      # list events by state
+linxira-crash pin <id>                  # backlog only, 0 token
+linxira-crash ignore <id>               # ignore, optionally with --reason
+linxira-crash restore <id>              # undo triage, back to pending
+linxira-crash mute <program>            # mute per program (--list / --off <program>)
+linxira-crash investigate <id>          # launch zetacode (spends tokens)
+linxira-crash investigate <id> --dry-run # print the command instead of running it
+```
+
+The "Linxira Crash Watch" menu entry runs `linxira-crash status`. `status`, `list`,
+`pin`, `ignore`, `restore` and `mute` cost no tokens and work offline; only
+`investigate` starts an agent.
 
 ## The three lanes
 
-Crash Watch does not implement its own agent invocation logic; instead it fixes three entry points as three lanes. All three use the same workspace as `--cwd`; the only differences are the session shape and the tool permissions:
+Crash Watch does not implement its own agent invocation logic; instead it fixes three entry points as three lanes. All three use the same workspace as `--cwd`; the only differences are the session shape and the tool permissions. Only the interactive lane is wired to notifications and `linxira-crash investigate`; the other two are fixed command shapes you run deliberately:
 
 | Lane | Command | Purpose |
 |---|---|---|
 | Interactive | `zetacode --cwd <ws> --session-dir <ws>/.zeta/sessions "<PROMPT> @<evidence>"` | The user is present and asks as they look; the session lives in the workspace and can be resumed |
-| Batch | `zetacode --cwd <ws> --goal "<PROMPT>"` | Give it one goal, it runs until done; used for tidying evidence in bulk |
-| Unattended | `zetacode --cwd <ws> -p --tools=read,grep,glob,lsp "<PROMPT>"` | Runs in the background with a **read-only** tool set: read, grep, glob, LSP queries |
+| Batch | `zetacode --cwd <ws> -p "<PROMPT>"` | Print mode: give it one goal, it finishes and exits; used for tidying evidence in bulk |
+| Unattended | `zetacode --cwd <ws> -p --tools=read,grep,glob,lsp "<PROMPT>"` | The unattended shape, with a **read-only** tool set: read, grep, glob, LSP queries |
 
-The unattended lane is the only one allowed to run automatically, and the price is that it **cannot write**: `--tools` grants only `read`, `grep`, `glob` and `lsp`, with no editing and no execution. Its output is a conclusion, not a patch.
+Crash Watch's source defines the batch lane as `--goal`, but the current Zetacode CLI
+has no such flag, so this page gives the usable `-p` print mode instead. The unattended lane is off by default and gated by `[lane.unattended].enabled`. Even when enabled, `--tools` grants only `read`, `grep`, `glob` and `lsp`, with no editing and no execution, so its output is a conclusion, not a patch. This release has no scheduler that starts the lane by itself: notifications and `investigate` both use the interactive lane, and the `schedule` key is read but never triggers a run.
 
 ## Skills
 
 Exactly one skill is materialised into the workspace along with Crash Watch: `diagnose-crash`, at `<ws>/.agents/skills/diagnose-crash/SKILL.md`. It describes this subsystem's diagnostic procedure and ships with the Crash Watch version rather than being written by the user.
 
-Since 0.1.4, Crash Watch **no longer** copies the `linxira-config` skill into the workspace. System-level skills stay in the system location and the workspace carries only the one belonging to this subsystem:
+Current releases **no longer** copy the `linxira-config` skill into the workspace. System-level skills stay in the system location and the workspace carries only the one belonging to this subsystem:
 
 - System skill: `/usr/share/linxira/agent/skills/<name>/SKILL.md` (currently only `linxira-config`, installed by the `linxira-config-hub` PKGBUILD)
 - Companion manifest: `/usr/share/linxira/agent/capabilities.json`
@@ -67,6 +108,26 @@ For skill scopes, installation and the `linxira-skills` CLI, see [Agent Skills](
 Notifications go out through `notify-send` with action buttons: investigate now, copy the prompt, pin, or mute. **Nothing runs until the user presses a button** — there is no background agent and no prepared patch.
 
 Muting is **per program**: `mute.json` records program names, not this particular crash. Once a known-crashy third-party program is muted its new crashes no longer raise a notification, but by policy the records are still written into the workspace and can be found when needed.
+
+## When root is needed
+
+**Never.** Capture is an **unprivileged user service**: `NoNewPrivileges`,
+`ProtectHome=read-only`, only the `AF_UNIX` address family, and writable paths
+limited to `%h/Linxira` and `%h/.local/state/linxira-crash-watch`.
+
+- Every `linxira-crash` subcommand runs as the current user; `investigate` also starts `zetacode` as the current user, with the workspace in the home directory.
+- Raw core dumps stay in `systemd-coredump`'s store and the workspace keeps only a reference; capture reads no root-owned file and needs no privileged `journalctl`.
+- Nothing is uploaded: analysis is local, with no network access and no automatic upstream report.
+
+## Known limitations
+
+- Only new `systemd-coredump` entries are captured; a crash that never produces a coredump (for example a process killed directly by the OOM killer) does not enter the queue.
+- Notifications need `notify-send`. With no notification daemon the notification degrades to a no-op while capture and triage keep working.
+- Muting is recorded per program name in `mute.json`, not per crash; later crashes from a muted program are still written to the workspace by policy.
+- Auto-triage only changes state after the timeout and never wakes the agent; every decision can be undone with `restore`.
+- The unattended lane does not run automatically (see above); `schedule` is currently a configuration field only.
+- The workspace holds text only. The core dump body is never copied in, so later review depends on the original dump behind `dumpRef` still being present.
+- `.zeta/sessions/` is not in `.gitignore`; check before committing the workspace that agent session transcripts are not included.
 
 ## Deeper design
 
