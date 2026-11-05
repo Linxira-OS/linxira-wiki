@@ -6,21 +6,22 @@ theme:
   name: material
   custom_dir: overrides
   language: zh
+  font: false
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: teal
-      accent: purple
-      toggle:
-        icon: material/brightness-7
-        name: 切换到深色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: teal
-      accent: purple
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: 切换到浅色模式
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
   features:
     - announce.dismiss
     - navigation.sections
@@ -29,6 +30,10 @@ theme:
 
 repo_url: https://github.com/Linxira-OS/linxira-wiki
 repo_name: Linxira-OS/linxira-wiki
+
+extra_css:
+  - assets/stylesheets/linxira-theme.css
+  - assets/stylesheets/linxira-wiki.css
 
 plugins:
   - search

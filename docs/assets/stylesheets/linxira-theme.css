@@ -1,0 +1,46 @@
+/* Linxira theme tokens — 唯一真相源。
+   消费方：
+     Linxira-OS.github.io/src/styles/linxira-theme.css              （Astro 站，含 zeta / bio-sdk 子站）
+     linxira-wiki/docs/assets/stylesheets/linxira-theme.css          （MkDocs Material，extra_css 相对 docs_dir）
+   三份文件必须字节一致；改动后 `bash tools/sync-theme-tokens.sh --check` 校验。
+   品牌色出处：linxira-artwork/README.md「Brand Colors」
+     teal #20B8B0（主身份）/ coral #F36F5D（端点与强调）/ deep ink（暗底）
+
+   规则：
+   - 页面里不要再出现 #20b8b0 / #f36f5d 之类字面量，一律用 var(--t-*)。
+   - 深色是默认主题；浅色是完整的第二主题，两者都必须可用。
+   - 只有 `[data-theme]` 切换变量，不改结构。 */
+
+:root {
+  --t-font-sans: "Geist", "Inter", system-ui, "Noto Sans SC", sans-serif;
+  --t-font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --t-radius: 12px; --t-radius-s: 6px;
+  --t-space-1: 4px; --t-space-2: 8px; --t-space-3: 12px; --t-space-4: 16px;
+  --t-space-6: 24px; --t-space-8: 32px; --t-space-12: 48px; --t-space-20: 80px;
+
+  /* 非主题相关的品牌常量 */
+  --t-brand-ink: #04211F;
+  --t-brand-hover: #4DD8D0; --t-brand-dim: #2F6F78; --t-brand-soft: #A7F3D0;
+  --t-danger: #E0574A; --t-warning: #FEB92E; --t-success: #28C840;
+}
+
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --t-bg-deep: #05080A; --t-bg: #0A0E11; --t-surface: #0F1519; --t-surface-2: #141C21;
+  --t-text: #ECF3F4; --t-text-secondary: #A8B8BE; --t-text-muted: #6E8085;
+  --t-border-subtle: #1B262B; --t-border-strong: #2A3A40;
+  --t-brand: #20B8B0; --t-signal: #F36F5D; --t-code-bg: #06090B;
+  --t-grid: rgba(32,184,176,.10); --t-glow: rgba(32,184,176,.28);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --t-bg-deep: #EDF1F1; --t-bg: #F5F8F7; --t-surface: #FFFFFF; --t-surface-2: #EFF4F3;
+  --t-text: #0B1113; --t-text-secondary: #445156; --t-text-muted: #6B7A7F;
+  --t-border-subtle: #DCE5E4; --t-border-strong: #C3D0CF;
+  /* 浅色底上 #0E8F89 / #D24A38 只有 3.6–4.1:1，正文级链接与代码不够。
+     压深一档：链接 4.6–4.8:1，按钮上改用白字（5.1:1）。 */
+  --t-brand: #0B7B76; --t-signal: #C0422F; --t-code-bg: #EDF2F1;
+  --t-brand-hover: #0F918B; --t-brand-ink: #FFFFFF;
+  --t-grid: rgba(15,140,134,.11); --t-glow: rgba(15,140,134,.14);
+}

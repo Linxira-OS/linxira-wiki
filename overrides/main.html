@@ -5,3 +5,33 @@
     🚧 本站建设中，内容不完整 —— 已发布的部分可直接使用，缺口会在后续提交里补齐。
   </span>
 {% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    // 把 Material 的配色方案镜像到 html[data-theme]，
+    // 共享 token（linxira-theme.css）只有 [data-theme="light"] 一套浅色值，
+    // 不镜像的话浅色方案仍会读到 :root 的深色默认值。
+    (function () {
+      function apply() {
+        var scheme = document.body.getAttribute('data-md-color-scheme');
+        document.documentElement.dataset.theme = scheme === 'default' ? 'light' : 'dark';
+      }
+      apply();
+      document.addEventListener('DOMContentLoaded', apply);
+      // Material 切换配色时改的是 body 属性；用 MutationObserver 覆盖
+      // 点击切换、系统主题变化、脚本改动三条路径。
+      try {
+        new MutationObserver(apply).observe(document.body, {
+          attributes: true,
+          attributeFilter: ['data-md-color-scheme']
+        });
+      } catch (e) {}
+      try {
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
+          setTimeout(apply, 0);
+        });
+      } catch (e) {}
+    })();
+  </script>
+{% endblock %}
