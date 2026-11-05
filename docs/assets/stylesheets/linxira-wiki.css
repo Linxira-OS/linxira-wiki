@@ -95,3 +95,35 @@
   color: var(--t-text-secondary);
   border-left-color: var(--t-border-strong);
 }
+
+/* 搜索框：Material 用 rgba(0,0,0,.26) 做默认底，浅色方案下是一块深灰。
+   统一到 token 面/字色，深色方案用更亮的面。 */
+.md-search__form {
+  background-color: var(--t-surface-2);
+  border-radius: var(--t-radius-s);
+}
+[data-md-color-scheme="slate"] .md-search__form {
+  background-color: var(--t-surface);
+}
+.md-search__input {
+  color: var(--t-text);
+}
+.md-search__input::placeholder {
+  color: var(--t-text-muted);
+}
+.md-search__icon[for="__search"] {
+  color: var(--t-text-muted);
+}
+
+/* 顶部 tab / 侧栏选中态跟着品牌色，不要 Material 默认蓝。 */
+.md-tabs__link--active,
+.md-nav__link--active,
+.md-nav__link:hover {
+  color: var(--t-brand);
+}
+.md-typeset .headerlink {
+  color: var(--t-text-muted);
+}
+.md-typeset .headerlink:hover {
+  color: var(--t-brand);
+}
