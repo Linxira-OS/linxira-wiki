@@ -32,6 +32,7 @@ repo_url: https://github.com/Linxira-OS/linxira-wiki
 repo_name: Linxira-OS/linxira-wiki
 
 extra_css:
+  - assets/stylesheets/linxira-fonts.css
   - assets/stylesheets/linxira-theme.css
   - assets/stylesheets/linxira-wiki.css
 
