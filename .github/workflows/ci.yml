@@ -2,6 +2,10 @@ name: Verify generated manifest
 
 # ai/manifest.json 是生成物。数据源在别的仓库里(governance/repositories.yaml 与各包
 # PKGBUILD), 那些仓库更新时本仓库没有 push, 所以除了 push 还挂每日定时检查。
+#
+# 生成物落后时不直接判红: 先按数据源重生成并提交回 master, 再跑校验。
+# 这样 VERSION 变更或上游数据变化都会自愈; 提交会再触发一次本工作流,
+# 第二轮没有差异, 校验通过即结束(不会无限循环)。
 on:
   push:
     branches:
@@ -11,7 +15,11 @@ on:
     - cron: "17 3 * * *"
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: manifest-verify
+  cancel-in-progress: false
 
 jobs:
   manifest:
@@ -19,6 +27,9 @@ jobs:
     steps:
       - name: Check out this repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: master
+          fetch-depth: 0
       - name: Check out the packages repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -40,7 +51,22 @@ jobs:
           python-version: "3.x"
       - name: Install test dependencies
         run: python -m pip install pytest
-      - name: Regenerate the manifest and compare
+      - name: Regenerate the manifest
+        env:
+          LINXIRA_WORKSPACE: ${{ github.workspace }}/workspace
+        run: python scripts/generate-manifest.py
+      - name: Commit manifest drift
+        run: |
+          if git diff --quiet -- ai/manifest.json; then
+            echo "ai/manifest.json 已是最新"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ai/manifest.json
+          git commit -m "chore(manifest): 数据源变化后自动重生成 ai/manifest.json"
+          git push origin master
+      - name: Verify generated manifest and privilege rules
         env:
           LINXIRA_WORKSPACE: ${{ github.workspace }}/workspace
         run: python -m pytest -q tests/ -k "generated_manifest or privilege_rules"
