@@ -12,8 +12,10 @@
    - 只有 `[data-theme]` 切换变量，不改结构。 */
 
 :root {
-  --t-font-sans: "Geist", "Inter", system-ui, "Noto Sans SC", sans-serif;
-  --t-font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --t-font-sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
+  --t-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas,
+    "Noto Sans Mono CJK SC", monospace;
   --t-radius: 12px; --t-radius-s: 6px;
   --t-space-1: 4px; --t-space-2: 8px; --t-space-3: 12px; --t-space-4: 16px;
   --t-space-6: 24px; --t-space-8: 32px; --t-space-12: 48px; --t-space-20: 80px;
