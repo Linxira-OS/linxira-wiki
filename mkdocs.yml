@@ -109,6 +109,8 @@ plugins:
             配置中心: Config Hub
             预装工具: Preinstalled Tools
             工作流模板: Workflows
+            发行与版本: Releases & editions
+            多底座与构建策略: Editions & build strategy
             外部链接: External
             法律与安全: Legal & Security
             许可与法律: License & Legal
@@ -156,6 +158,8 @@ nav:
       - 配置中心: features/config-hub.md
       - 预装工具: features/preinstalled-tools.md
       - 工作流模板: features/workflows.md
+  - 发行与版本:
+      - 多底座与构建策略: editions.md
   - 外部链接:
       - Arch Wiki: external/arch-wiki.md
   - 法律与安全:
