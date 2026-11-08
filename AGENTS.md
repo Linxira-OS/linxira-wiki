@@ -36,7 +36,7 @@ python -m pytest -q tests/ -k "generated_manifest or privilege_rules"   # CI ci.
 ```
 
 ## 发布与签名
-- 系统源仓:`VERSION`(当前 `0.1.0`)变动 → `.github/workflows/release.yml` 自动打 `v<VERSION>` tag Release(触发分支 `master`)。
+- 系统源仓:`VERSION`(当前 `0.1.1`)变动 → `.github/workflows/release.yml` 自动打 `v<VERSION>` tag Release(触发分支 `master`)。
 - 打包:PKGBUILD 在 `packages/packages/linxira-wiki/PKGBUILD`(git source、`_commit` 固定;
   装 `cli/linxira-wiki` 到 `/usr/bin`,`ai/`+`docs/`+`mkdocs.yml` 到 `/usr/share/linxira/wiki`)。
 - 站点发布:`.github/workflows/pages.yml`(push `master`)→ `mkdocs build --strict` → GitHub Pages
