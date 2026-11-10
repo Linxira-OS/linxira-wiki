@@ -1,8 +1,8 @@
 # Editions and build strategy
 
-This page sets out the boundaries, promises and update cadence of Linxira across
-multiple bases. The site announcement is
-[Editions preview](https://linxira-os.github.io/en/blog/editions-and-build-strategy/).
+This page sets out Linxira's near-term build plan and the promises attached to
+it. The site announcement is
+[Near-term plan](https://linxira-os.github.io/en/blog/editions-and-build-strategy/).
 
 ## Positioning
 
@@ -10,18 +10,28 @@ Linxira is not a distribution built from scratch. It is a **removable layer on
 top of an upstream distribution**: catalog, transaction plan/confirm/receipt,
 signed repository, configuration entry points, update notifications, crash
 watch and welcome. Each base provides the kernel, hardware enablement and base
-userland; Linxira provides the curated software, privilege boundaries and a
-reproducible environment.
+userland.
 
-## Three editions
+## Near-term plan
 
-| Edition | Base | Role | Cadence | Exit | Status |
+- **Arch x86_64**: the current mainline. Rolling updates, a planned monthly ISO
+  snapshot; removing `linxira-*` returns you to vanilla Arch.
+- **Ubuntu interim validation**: start with 26.10 (kernel 7.3) as a validation
+  image, then 27.04 / 27.10 if needed, until the next LTS (28.04). These are
+  9-month validation builds, not long-term products.
+- **NixOS**: not a product line. Zeta already has Nix builds; use upstream Nix
+  in a container or VM. We do not need to maintain a NixOS configuration.
+
+| Line | Base | Role | Cadence | Exit | Status |
 |---|---|---|---|---|---|
-| **Arch x86_64** | Arch Linux | Primary development machine; also usable for inference | Rolling; planned monthly ISO snapshot | Remove `linxira-*` and you are back on vanilla Arch | Current mainline |
-| **Ubuntu x86_64 / ARM64** | Ubuntu 26.04 LTS | Inference, scientific computing, Chinese GPUs; ARM for DGX Spark, N1X and similar | LTS point releases + upstream security; HWE at point releases | Removable derivative, but not a rolling exit | Under research |
-| **NixOS** | NixOS (VM / container) | Reproducible reference environment, benchmarks, toolchains | Pinned flake; updated on demand | Configuration and flake only | Experimental, no SLA |
+| Arch x86_64 | Arch Linux | Primary development machine; also inference | Rolling; planned monthly ISO snapshot | Remove `linxira-*`, return to vanilla Arch | Current mainline |
+| Ubuntu interim validation | 26.10 / 27.04 / 27.10 | Validate apt backend, desktop, drivers, ARM allowlist | Follows interims, 9 months | Reimage; layer removable | In validation |
+| Ubuntu LTS (future) | 26.04 LTS or 28.04 LTS | Inference, scientific computing, Chinese GPUs | LTS point releases + upstream security | Removable derivative, not a rolling exit | Pending |
 
-## Ubuntu timeline (do not wait for a version that does not exist)
+Validation images will be labelled **“validation build, not long-term support,
+EOL date”**, kept out of the support matrix and given no long-term promise.
+
+## Ubuntu timeline
 
 - 26.04 LTS: released 2026-04-23, standard security maintenance until 2031-05,
   ESM until 2036.
@@ -30,10 +40,10 @@ reproducible environment.
 - 27.10: October 2027, interim.
 - Next LTS: 28.04 (April 2028).
 
-There is no “long-term release after July 2027” option. For **LTS + kernel
-7.3**, the target is **26.04.2 (2027-02-18)**: following Ubuntu's HWE cadence,
-it should bring the 26.10 7.3 kernel into 26.04 LTS. Check the Ubuntu release
-notes for the final word.
+There is no LTS in 2027. For LTS + kernel 7.3, the decision point is
+**26.04.2 (2027-02-18)**: if HWE brings 7.3 and the hardware validation passes,
+move the long-term baseline to 26.04 LTS. Otherwise continue on 27.04, and
+migrate or retire 26.10 before its EOL in 2027-07.
 
 ## China network and mirrors
 
@@ -42,14 +52,13 @@ notes for the final word.
 - **Ubuntu**: the official archive has Chinese mirrors (TUNA, USTC, Aliyun,
   Huawei Cloud and others); apt and ISOs can be served domestically. The
   installer will offer a domestic mirror option.
-- **NixOS**: TUNA, USTC and SJTU provide nix-channels and binary-cache mirrors,
-  but coverage and stability are not guaranteed. Until that is reliable, NixOS
-  remains an experimental VM reference with no promise.
 - **Chinese GPUs**: Moore Threads, Ascend and similar vendors ship drivers and
   toolchains mainly for Ubuntu.
 - **DGX Spark / N1X**: NVIDIA DGX OS is based on Ubuntu 26.04 LTS ARM64, but
   image downloads may be account- or network-gated. Support is limited to a
   hardware allowlist, not generic ARM.
+- **NixOS**: mirrors are unreliable in China and it is not a product entry
+  point.
 
 ## Build and transaction contracts
 
@@ -68,8 +77,7 @@ notes for the final word.
 ## Boundaries
 
 1. Thin and removable: on Arch, removing every `linxira-*` package leaves a
-   working vanilla Arch. Ubuntu keeps the layer removable too, but it is not a
-   rolling distribution.
+   working vanilla Arch. Ubuntu validation images keep the layer removable too.
 2. Common software only: no sponsor bloat, no strange system-level components.
 3. Conservative supply chain: AUR is off by default on Arch; unreviewed PPAs are
    off by default on Ubuntu; vendor debs are reviewed and republished in our
@@ -80,11 +88,3 @@ notes for the final word.
 5. AI is optional: no agent auto-runs by default. Crash Watch performs
    zero-token triage; analysis starts only when the user clicks, stays local,
    read-only, and is never uploaded.
-
-## What happens next
-
-- Ubuntu: research 26.04 LTS + 7.3 HWE, Chinese GPU drivers and the DGX Spark /
-  N1X allowlist. No release date is promised until that research is done.
-- NixOS: flake / VM configuration only.
-- Arch: keep the mainline and move toward the monthly ISO snapshot and an exit
-  test.
